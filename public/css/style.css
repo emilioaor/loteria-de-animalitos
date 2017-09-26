@@ -1,0 +1,127 @@
+.page-header {
+    margin-bottom: 5px;
+    border-color: #048870;
+}
+#wrapper {
+    padding-left: 0;
+}
+.navbar-inverse {
+    background-color: #08a589;
+    border-color: #08a589;
+}
+.navbar-inverse .navbar-brand {
+    color: #fff;
+}
+.top-nav>li>a {
+    color: #fff;
+}
+.top-nav>li>a:hover,
+.top-nav>li>a:focus,
+.top-nav>.open>a,
+.top-nav>.open>a:hover,
+.top-nav>.open>a:focus {
+    background-color: #048870;
+}
+.breadcrumb {
+    background-color: rgba(16, 218, 182, .3);
+}
+.breadcrumb a {
+    color: #555;
+}
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background-color: #08a589;
+    border-color: #08a589;
+}
+.pagination>li>a,
+.pagination>li>span {
+    color: #08a589;
+}
+.gain {
+    background-color: #08a589;
+    color: #fff;
+    padding: 5px;
+    font-size: 12px;
+    transform: rotate(-5deg);
+    border-radius: 50%;
+    display: inline-block;
+    font-weight: bold;
+}
+.section-float {
+    width: 38%;
+    position: fixed;
+    top: 200px;
+}
+@media screen and (max-width: 767px) {
+    .section-float {
+        width: 45%;
+    }
+}
+/* BUTTONS */
+.btn-primary-color {
+    color: #fff;
+    background-color: #08a589;
+    border-color: #048870;
+}
+.btn-primary-color:hover,
+.btn-primary-color:focus,
+.btn-primary-color:visited {
+    color: #fff;
+    background-color: #048870;
+}
+/* SECTION FORM */
+.section-form .form-group {
+    padding: 20px;
+}
+.section-form .form-group .col-xs-4 label {
+    display: block;
+    text-align: right;
+}
+/* SECTION ANIMAL */
+.section-animals > .col-sm-5 {
+    border-right: solid 1px #eee;
+    padding-bottom: 20px;
+}
+.section-animals > .col-sm-7 table {
+    font-size: 16px;
+}
+.section-animals > .col-sm-7 table .error {
+    color: #f42a09;
+    font-size: 12px;
+}
+.section-animals__title {
+    text-align: center;
+    margin: 0 0 10px 0;
+    padding: 5px;
+    border-bottom: solid #048870 1px;
+}
+.section-animals__select {
+    margin-bottom: 20px;
+}
+.section-animals__item img {
+    max-width: 50px;
+}
+.section-animals__item .selected {
+    color: #08a589;
+}
+.section-animals__item p {
+    font-size: 16px;
+    padding: 5px 0;
+}
+.section-animals__item p a {
+    color: #555;
+}
+.section-animals__item p a:hover,
+.section-animals__item p a:active,
+.section-animals__item p a:visited,
+.section-animals__item p a:focus {
+    color: #555;
+    text-decoration: none;
+}
+.section-animals__item p strong{
+    font-size: 18px;
+}
