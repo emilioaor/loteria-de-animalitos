@@ -11,6 +11,33 @@
         <div class="col-xs-12">
 
             <h3>Lista de tickets</h3>
+            <div class="row">
+                <div class="col-sm-8 col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="search" placeholder="Buscar por ticket ID">
+                    <span class="input-group-btn">
+                        <a href="{{ route('user.list') }}?search=[[ search ]]" id="btnSearch" class="btn btn-default">
+                            <i class="fa fa-fw fa-search"></i>
+                        </a>
+                    </span>
+
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+
+                <div class="col-xs-12">
+                    @if(Request::has('search'))
+                        <br>
+                        <a href="{{ route('user.list') }}" class="text-danger">
+                            <i class="fa fa-remove"></i>
+                        </a>
+                        <small>
+                            <strong>Filtrado por:</strong> {{ Request::get('search') }}
+
+                        </small>
+
+                    @endif
+                </div>
+            </div><!-- /.row -->
             <hr>
             <table class="table table-responsive">
                 <thead>

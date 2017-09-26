@@ -95,13 +95,20 @@ class IndexController extends Controller
     /**
      * Carga una vista con la lista de tickets
      *
+     * @param Request $request
      * @return $this
      */
-    public function listTicket() {
+    public function listTicket(Request $request) {
         $tickets = Ticket::orderBy('created_at', 'DESC');
 
         if (Auth::user()->level === User::LEVEL_USER) {
             $tickets->where('user_id', Auth::user()->id);
+        }
+
+        if (! empty($request->search)) {
+            $search = $request->search;
+            $search = '%' . str_replace(' ', '%', $search) . '%';
+            $tickets->where('public_id', 'LIKE', $search);
         }
 
         return view('user.index')->with(['tickets' => $tickets->paginate(20)]);
