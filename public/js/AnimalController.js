@@ -1,7 +1,6 @@
 angular.module('AnimalModule').controller('AnimalController', [
     '$scope',
-    '$http',
-    function($scope, $http) {
+    function($scope) {
 
         $scope.addToTicket = (animal) => {
             animal.amount = 0;
@@ -25,6 +24,31 @@ angular.module('AnimalModule').controller('AnimalController', [
             return false;
         };
 
+        $scope.hasList = (number) => {
+            for (let animal in $scope.data.animalsList) {
+                if ($scope.data.animalsList[animal].number == number) {
+                    $scope.styleAnimalAdd = {};
+                    return true;
+                }
+            }
+
+            $scope.styleAnimalAdd = {
+                'border-color' : '#c9302c',
+            };
+
+            return false;
+        };
+
+        $scope.getListAnimal = (number) => {
+            for (let animal in $scope.data.animalsList) {
+                if ($scope.data.animalsList[animal].number == number) {
+                    return $scope.data.animalsList[animal]
+                }
+            }
+
+            return false;
+        };
+
         $scope.clearName = (name) => {
             let animalName = name.toLowerCase();
             animalName = animalName.replace('á', 'a');
@@ -35,8 +59,45 @@ angular.module('AnimalModule').controller('AnimalController', [
 
             return animalName;
         };
+        
+        $scope.printIfHasList = function () {
+            if ($scope.hasList($scope.newAnimal.number)) {
+                return $scope.getListAnimal($scope.newAnimal.number).name;
+            }
+
+            return '-';
+        };
+
+        $scope.keyToGoAmount = function (evt) {
+            if (evt.keyCode == 13) {
+                $('#newAnimalAmount').focus();
+            }
+        };
+
+        $scope.keyToAddNewAnimal = function (evt) {
+            if (evt.keyCode == 13) {
+                $scope.addNewAnimal();
+            }
+        };
+
+        $scope.addNewAnimal = function () {
+            if ($scope.hasList($scope.newAnimal.number) && $scope.newAnimal.amount > 0) {
+                let animal = $scope.getListAnimal($scope.newAnimal.number);
+                if (! $scope.hasTicket(animal.id)) {
+                    animal.amount = $scope.newAnimal.amount;
+                    animal.error = {
+                        required : false
+                    };
+                    $scope.data.animalsTicket.push(animal);
+                }
+                $scope.newAnimal = {};
+                $('#newAnimalNumber').focus();
+            }
+        };
 
         $scope.data = data;
         $scope.data.animalsTicket = [];
+        $scope.newAnimal = {};
+        $scope.styleAnimalAdd = {};
     }])
 ;

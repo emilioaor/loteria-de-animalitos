@@ -126,10 +126,6 @@ class IndexController extends Controller
         return view('user.show')->with(['ticket' => $ticket]);
     }
 
-    public function results() {
-
-    }
-
     /**
      * Marca un ticket como pago
      *
