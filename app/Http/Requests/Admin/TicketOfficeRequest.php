@@ -27,6 +27,7 @@ class TicketOfficeRequest extends FormRequest
             'username' => 'required|between:4,15',
             'name' => 'required|between:3,40',
             'password' => 'required|between:6,15|confirmed',
+            'print_code' => 'required|between:6,7|unique:users',
         ];
     }
 
@@ -35,10 +36,13 @@ class TicketOfficeRequest extends FormRequest
             'username.required' => 'El nombre de usuario es requerido',
             'name.required' => 'El nombre es requerido',
             'password.required' => 'La contraseña es requerida',
+            'print_code.required' => 'El código de impresión es requerido',
             'username.between' => 'El nombre de usuario debe poseer entre :min y :max caracteres',
             'name.between' => 'El nombre debe poseer entre :min y :max caracteres',
+            'print_code.between' => 'El código de impresión debe poseer entre :min y :max caracteres',
             'password.between' => 'La contraseña debe poseer entre :min y :max caracteres',
             'password.confirmed' => 'Las contraseñas no coinciden',
+            'print_code.unique' => 'El código de impresión ya esta siendo usado',
         ];
     }
 }

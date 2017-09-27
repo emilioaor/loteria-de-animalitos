@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
         $user->username = 'admin';
         $user->password = bcrypt('123456');
         $user->level = User::LEVEL_ADMIN;
+        $user->print_code = '0000000';
         $user->save();
 
         // Taquilla inicial
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
         $user->username = 'taq1';
         $user->password = bcrypt('123456');
         $user->level = User::LEVEL_USER;
+        $user->print_code = '1111111';
         $user->save();
     }
 }

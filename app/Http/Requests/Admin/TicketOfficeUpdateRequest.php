@@ -25,6 +25,7 @@ class TicketOfficeUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|between:3,40',
+            'print_code' => 'required|between:6,7|unique:users',
         ];
     }
 
@@ -32,6 +33,9 @@ class TicketOfficeUpdateRequest extends FormRequest
         return [
             'name.required' => 'El nombre es requerido',
             'name.between' => 'El nombre debe poseer entre :min y :max caracteres',
+            'print_code.required' => 'El código de impresión es requerido',
+            'print_code.between' => 'El código de impresión debe poseer entre :min y :max caracteres',
+            'print_code.unique' => 'El código de impresión ya esta siendo usado',
         ];
     }
 }

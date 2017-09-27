@@ -36,6 +36,15 @@
 
             <div class="col-sm-3">
                 <div class="form-group">
+                    <label for="print_code">Código de impresión</label>
+                    <input type="number" class="form-control" name="print_code" id="print_code" placeholder="Código de impresión" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
                     <label for="password1">Contraseña</label>
                     <input type="password" class="form-control" name="password" id="password1" placeholder="Contraseña" maxlength="15" required>
                 </div>
