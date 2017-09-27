@@ -58,7 +58,7 @@ class ApiController extends Controller
 
             $printSpooler = PrintSpooler::find($id['id']);
             $printSpooler->status = PrintSpooler::STATUS_COMPLETE;
-            //$printSpooler->save();
+            $printSpooler->save();
 
             $response .= 'ANI-' . $printSpooler->ticket_id . "\n";
         }
