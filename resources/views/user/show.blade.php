@@ -34,10 +34,16 @@
             <p>{{ $ticket->status }}</p>
         </div>
 
-        <div class="col-sm-3">
-            <label for="">Sorteo</label>
-            <p>{{ $ticket->dailySort->sort->description . ' - ' . $ticket->dailySort->getDateSort()->format('d-m-Y')  }}</p>
+        <div class="col-xs-12">
+            <label for="">Sorteos</label>
         </div>
+
+        @foreach($ticket->dailySorts as $dailySort)
+            <div class="col-sm-3">
+                <p>{{ $dailySort->sort->description . ' - ' . $dailySort->getDateSort()->format('d-m-Y')  }}</p>
+                <p><strong>Ganador:</strong> {{ $dailySort->result ? $dailySort->result->animal->name : '-' }}</p>
+            </div>
+        @endforeach
 
     </div>
 

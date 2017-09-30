@@ -94,6 +94,16 @@ angular.module('AnimalModule').controller('AnimalController', [
                 $('#newAnimalNumber').focus();
             }
         };
+        
+        $scope.hasSelectedSort = function () {
+            let sorts = $scope.data.sorts;
+            for (let i in sorts) {
+                if (sorts[i]) {
+                    return true;
+                }
+            }
+            return false;
+        };
 
         $scope.data = data;
         $scope.data.animalsTicket = [];

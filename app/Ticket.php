@@ -12,7 +12,7 @@ class Ticket extends Model
     protected $table = 'tickets';
 
     protected $fillable = [
-        'public_id','date','user_id','daily_sort_id'
+        'public_id','date','user_id',
     ];
 
     /**
@@ -42,8 +42,10 @@ class Ticket extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function dailySort() {
-        return $this->belongsTo('App\DailySort', 'daily_sort_id');
+    public function dailySorts() {
+        return $this->belongsToMany('App\DailySort', 'ticket_sort')->withPivot([
+            'ticket_id', 'daily_sort_id',
+        ]);
     }
 
     /**
@@ -76,15 +78,18 @@ class Ticket extends Model
      * @return bool
      */
     public function isGain() {
-        $result = $this->dailySort->result;
+        foreach ($this->dailySorts as $dailySort) {
 
-        if (! $result) {
-            return false;
-        }
+            $result = $dailySort->result;
 
-        foreach ($this->animals as $animal) {
-            if ($animal->id === $result->animal->id) {
-                return true;
+            if (! $result) {
+                continue;
+            }
+
+            foreach ($this->animals as $animal) {
+                if ($animal->id === $result->animal->id) {
+                    return true;
+                }
             }
         }
 
@@ -98,16 +103,26 @@ class Ticket extends Model
      * @return float|int
      */
     public function payToGain() {
-        $animalGain = $this->dailySort->result->animal;
-        $amount = 0;
-        foreach ($this->animals as $animal) {
-            if ($animal->id === $animalGain->id) {
-                $amount = $animal->pivot->amount;
-                $div = $amount /100;
-                $amount = $div * $this->dailySort->sort->pay_per_100;
+        $total = 0;
+        foreach ($this->dailySorts as $dailySort) {
+
+            if (! $dailySort->result) {
+                continue;
             }
+
+            $animalGain = $dailySort->result->animal;
+            $amount = 0;
+            foreach ($this->animals as $animal) {
+                if ($animal->id === $animalGain->id) {
+                    $amount = $animal->pivot->amount;
+                    $div = $amount /100;
+                    $amount = $div * $dailySort->sort->pay_per_100;
+                }
+            }
+
+            $total += $amount;
         }
 
-        return $amount;
+        return $total;
     }
 }

@@ -138,7 +138,7 @@ class SortController extends Controller
 
             $dailySort = $sort->getLastDailySort();
 
-            if (! $dailySort) {
+            if (! $sort->hasDailySortToday()) {
                 //  Se registra un sorteo para el dia
                 $dailySort = new DailySort();
                 $dailySort->date_sort = new \DateTime('now');
@@ -147,7 +147,6 @@ class SortController extends Controller
 
             $dailySort->status = DailySort::STATUS_ACTIVE;
             $dailySort->save();
-
         }
 
         DB::commit();

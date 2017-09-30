@@ -55,22 +55,31 @@ class IndexController extends Controller
     public function store(Request $request) {
         DB::beginTransaction();
 
-            $dailySort = DailySort::find($request->sort_id);
-
-            if ($dailySort->status === DailySort::STATUS_CLOSE) {
+            if (empty($request->sorts)) {
                 DB::rollback();
-                $this->sessionMessages('El sorteo ya esta cerrado', 'alert-danger');
+                $this->sessionMessages('Debe seleccionar al menos un sorteo', 'alert-danger');
 
                 return redirect()->route('user.index');
+            }
+
+            foreach ($request->sorts as $id => $ds) {
+                $dailySort = DailySort::find($id);
+
+                if ($dailySort->status == DailySort::STATUS_CLOSE) {
+                    DB::rollback();
+                    $this->sessionMessages('Este ticket posee sorteos cerrados', 'alert-danger');
+
+                    return redirect()->route('user.index');
+                }
             }
 
             $ticket = new Ticket();
 
             $ticket->public_id = 'TICK00' . (Ticket::all()->count() + 1);
             $ticket->user_id = Auth::user()->id;
-            $ticket->daily_sort_id = $request->sort_id;
             $ticket->status = Ticket::STATUS_ACTIVE;
             $ticket->save();
+            $ticket->dailySorts()->sync(array_keys($request->sorts));
 
             $amounts = $request->amounts;
 

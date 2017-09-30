@@ -22,7 +22,9 @@ class DailySort extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tickets() {
-        return $this->hasMany('App\Ticket', 'daily_sort_id');
+        return $this->belongsToMany('App\Ticket', 'ticket_sort')->withPivot([
+            'daily_sort_id', 'ticket_id',
+        ]);
     }
 
     /**
@@ -49,6 +51,10 @@ class DailySort extends Model
      * @return \DateTime
      */
     public function getDateSort() {
+        if ($this->date_sort instanceof \DateTime) {
+            return $this->date_sort;
+        }
+
         return \DateTime::createFromFormat('Y-m-d H:i:s', $this->date_sort);
     }
 

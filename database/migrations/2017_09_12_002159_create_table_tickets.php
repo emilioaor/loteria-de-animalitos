@@ -18,8 +18,6 @@ class CreateTableTickets extends Migration
             $table->string('public_id', 20)->unique();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('daily_sort_id')->unsigned();
-            $table->foreign('daily_sort_id')->references('id')->on('daily_sort');
             $table->string('status', 20);
             $table->timestamps();
         });

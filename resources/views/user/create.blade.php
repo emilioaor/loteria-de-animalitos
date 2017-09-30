@@ -72,12 +72,19 @@
                 <form action="{{ route('user.create') }}" method="post" name="formAnimal" id="formAnimal">
 
                     <div class="form-group">
-                        <label for="sort_id">Sorteo</label>
-                        <select name="sort_id" id="sort_id" class="form-control" required>
-                            @foreach($sorts as $dailySort)
-                                <option value="{{ $dailySort->id }}">{{ $dailySort->sort->description . ' - ' . $dailySort->sort->time_sort }}</option>
-                            @endforeach
-                        </select>
+                        <div class="col-xs-12">
+                            <label for="sort_id">Sorteos</label>
+                        </div>
+                        @foreach($sorts as $dailySort)
+                            <div class="col-sm-4">
+                                <input
+                                        type="checkbox"
+                                        name="sorts[{{ $dailySort->id }}]"
+                                        ng-model="data.sorts[{{ $dailySort->id }}]"
+                                        ng-init="data.sorts[{{ $dailySort->id }}]=false">
+                                {{ $dailySort->sort->description . '-' . $dailySort->sort->time_sort }}
+                            </div>
+                        @endforeach
                     </div>
 
                     {{ csrf_field() }}
@@ -113,7 +120,9 @@
                                 </span>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger" ng-click="removeFromTicket($index)">
+                                <button type="button"
+                                        class="btn btn-danger"
+                                        ng-click="removeFromTicket($index)">
                                     <i class="fa fa-remove"></i>
                                 </button>
                             </td>
@@ -123,7 +132,10 @@
 
                     <div class="text-center">
 
-                        <button class="btn btn-lg btn-primary-color" ng-show="data.animalsTicket.length">
+                        <button
+                                class="btn btn-lg btn-primary-color"
+                                ng-show="data.animalsTicket.length"
+                                ng-disabled="! hasSelectedSort()">
                             <i class="fa fa-save"></i> Guardar ticket (F2)
                         </button>
                     </div>

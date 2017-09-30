@@ -43,10 +43,9 @@
                 <thead>
                     <tr>
                         <th width="15%">Ticket ID</th>
-                        <th width="15%">Fecha de registro</th>
-                        <th width="15%">Taquilla</th>
+                        <th width="25%">Fecha de registro</th>
+                        <th width="25%">Taquilla</th>
                         <th width="20%">Estatus</th>
-                        <th width="20%">Sorteo</th>
                         <th width="15%">Monto</th>
                         <th></th>
                     </tr>
@@ -64,7 +63,6 @@
                                     {{ $ticket->status }}
                                 @endif
                             </td>
-                            <td>{{ $ticket->dailySort->sort->description . ' - ' . $ticket->dailySort->getDateSort()->format('d-m-Y') }}</td>
                             <td>{{ number_format($ticket->amount(), 2, ',', '.') }}</td>
                             <td>
                                 <a href="{{ route('user.show', ['ticket' => $ticket->id]) }}" class="btn btn-primary-color">
