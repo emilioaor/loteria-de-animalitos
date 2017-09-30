@@ -69,6 +69,8 @@ class Ticket extends Model
             $amount += $animal->pivot->amount;
         }
 
+        $amount = $amount * count($this->dailySorts);
+
         return $amount;
     }
 

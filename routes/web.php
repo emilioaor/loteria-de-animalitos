@@ -25,6 +25,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'user'], function() {
     Route::put('/ticket/{ticket}/payTicket', ['uses' => 'User\IndexController@payTicket', 'as' => 'user.payTicket']);
     Route::get('/results', ['uses' => 'User\ResultController@index', 'as' => 'results.index']);
     Route::resource('/ticketOffice', 'Admin\TicketOfficeController');
+    Route::get('report', ['uses' => 'User\ReportController@index', 'as' => 'user.report']);
+    Route::get('report/generate', ['uses' => 'User\ReportController@generateDailyReport', 'as' => 'user.report.generate']);
 });
 
 //  RUTAS ADMIN

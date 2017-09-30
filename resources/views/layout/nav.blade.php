@@ -21,6 +21,9 @@
                         <li>
                             <a href="{{ route('user.list') }}"><i class="fa fa-fw fa-list"></i> Lista de tickets</a>
                         </li>
+                        <li>
+                            <a href="{{ route('user.report') }}"><i class="glyphicon glyphicon-list-alt"></i> Reporte</a>
+                        </li>
 
                         @if(Auth::user()->level === \App\User::LEVEL_ADMIN)
                             <li class="divider"></li>
