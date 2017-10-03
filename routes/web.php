@@ -23,6 +23,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'user'], function() {
     Route::get('/list', ['uses' => 'User\IndexController@listTicket', 'as' => 'user.list']);
     Route::get('/ticket/{ticket}', ['uses' => 'User\IndexController@show', 'as' => 'user.show']);
     Route::put('/ticket/{ticket}/payTicket', ['uses' => 'User\IndexController@payTicket', 'as' => 'user.payTicket']);
+    Route::put('/ticket/{ticket}/nullTicket', ['uses' => 'User\IndexController@nullTicket', 'as' => 'user.nullTicket']);
     Route::get('/results', ['uses' => 'User\ResultController@index', 'as' => 'results.index']);
     Route::resource('/ticketOffice', 'Admin\TicketOfficeController');
     Route::get('report', ['uses' => 'User\ReportController@index', 'as' => 'user.report']);

@@ -41,6 +41,7 @@ class ReportController extends Controller
 
         $tickets = Ticket::where('created_at', '>=', $dateStart)
             ->where('created_at', '<=', $dateEnd)
+            ->where('status', '<>', Ticket::STATUS_NULL)
             ->orderBy('created_at', 'DESC')
             ->get()
         ;

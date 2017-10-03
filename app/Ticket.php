@@ -8,6 +8,7 @@ class Ticket extends Model
 {
     const STATUS_ACTIVE = 'Activo';
     const STATUS_PAY = 'Pago';
+    const STATUS_NULL = 'Anulado';
 
     protected $table = 'tickets';
 

@@ -150,4 +150,20 @@ class IndexController extends Controller
 
         return redirect()->route('user.show', ['ticket' => $ticketId]);
     }
+
+    /**
+     * Anula un ticket
+     *
+     * @param $ticketId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function nullTicket($ticketId) {
+        $ticket = Ticket::find($ticketId);
+        $ticket->status = Ticket::STATUS_NULL;
+        $ticket->save();
+
+        $this->sessionMessages('Ticket anulado');
+
+        return redirect()->route('user.show', ['ticket' => $ticketId]);
+    }
 }

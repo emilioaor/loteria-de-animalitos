@@ -47,20 +47,39 @@
 
     </div>
 
-    @if($ticket->isGain() && $ticket->status === \App\Ticket::STATUS_ACTIVE)
-        <div class="row">
-            <div class="col-xs-12">
-                <form action="{{ route('user.payTicket', ['ticket' => $ticket->id]) }}" method="post">
+    <div class="row">
+        <div class="col-xs-12">
+            @if($ticket->isGain() && $ticket->status === \App\Ticket::STATUS_ACTIVE)
+                <form
+                        action="{{ route('user.payTicket', ['ticket' => $ticket->id]) }}"
+                        method="post"
+                        style="display: inline-block;"
+                        id="payForm">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
 
-                    <button class="btn btn-primary-color">
+                    <button type="button" class="btn btn-primary-color" onclick="payTicket();">
                         <i class="fa fa-fw fa-money"></i> Pagar ticket
                     </button>
                 </form>
-            </div>
+            @endif
+
+            @if($ticket->status === \App\Ticket::STATUS_ACTIVE)
+                <form
+                        action="{{ route('user.nullTicket', ['ticket' => $ticket->id]) }}"
+                        method="post"
+                        style="display: inline-block;"
+                        id="nullForm">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
+
+                    <button type="button" class="btn btn-danger" onclick="nullTicket();">
+                        <i class="fa fa-fw fa-remove"></i> Anular ticket
+                    </button>
+                </form>
+            @endif
         </div>
-    @endif
+    </div>
 
     <div class="row">
         <hr>
@@ -86,10 +105,25 @@
     <div class="row">
         <div class="col-xs-12">
             <h3>Total: {{ number_format($ticket->amount(), 2, ',', '.') }}</h3>
-            @if($ticket->isGain())
+            @if($ticket->isGain() && $ticket->status !== \App\Ticket::STATUS_NULL)
                 <h3>Pagar al ganador: {{ number_format($ticket->payToGain(), 2, ',', '.') }}</h3>
             @endif
         </div>
     </div>
 
+@endsection
+
+@section('js')
+    <script>
+        function nullTicket() {
+            if (confirm('¿Anular este ticket?')) {
+                $('#nullForm').submit();
+            }
+        }
+        function payTicket() {
+            if (confirm('¿Pagar este ticket?')) {
+                $('#payForm').submit();
+            }
+        }
+    </script>
 @endsection
