@@ -81,6 +81,7 @@ angular.module('AnimalModule').controller('AnimalController', [
         };
 
         $scope.addNewAnimal = function () {
+            moveScroll = true;
             if ($scope.hasList($scope.newAnimal.number) && $scope.newAnimal.amount > 0) {
                 let animal = $scope.getListAnimal($scope.newAnimal.number);
                 if (! $scope.hasTicket(animal.id)) {

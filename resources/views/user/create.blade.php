@@ -12,7 +12,7 @@
                 <!-- Lista de animalitos -->
                 <div class="col-sm-6 col-md-4 section-animals__item" ng-repeat="animal in data.animalsList">
                     <p class="text-center" ng-hide="hasTicket(animal.id);">
-                        <a href="" ng-click="addToTicket(animal);">
+                        <a href="" ng-click="addToTicket(animal);" onclick="moveScroll = true">
                             <img ng-src="[[ data.imgUrl + '/' + clearName(animal.name) + '.jpg' ]]" alt="[[ animal.name ]]">
                             <strong>[[ animal.number ]]</strong>
                             [[ animal.name ]]
@@ -62,7 +62,7 @@
                                     >
                         </td>
                         <td>
-                            <button type="button" class="btn btn-success" ng-click="addNewAnimal()">
+                            <button type="button" class="btn btn-success" ng-click="addNewAnimal()" onclick="moveScroll = true">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </td>
@@ -90,45 +90,47 @@
                     {{ csrf_field() }}
 
                             <!-- Animalitos jugados -->
-                    <table class="table">
-                        <tbody>
-                        <tr ng-repeat="animal in data.animalsTicket">
-                            <td width="10%">[[ $index + 1 ]]</td>
-                            <td width="50%">[[ animal.number + ' - ' + animal.name ]]</td>
-                            <td width="40%">
-                                <input
-                                        type="hidden"
-                                        class="form-control"
-                                        placeholder="Valor"
-                                        ng-value="animal.id"
-                                        name="animals[]"
-                                        required
-                                        >
-                                <input
-                                        type="number"
-                                        class="form-control"
-                                        placeholder="Valor"
-                                        ng-model="animal.amount"
-                                        name="amounts[]"
-                                        required
-                                        >
+                    <div id="spaceAnimalTicket" style="max-height: 250px; overflow: auto; width: 100%; margin-bottom: 10px;">
+                        <table class="table">
+                            <tbody>
+                            <tr ng-repeat="animal in data.animalsTicket">
+                                <td width="10%">[[ $index + 1 ]]</td>
+                                <td width="50%">[[ animal.number + ' - ' + animal.name ]]</td>
+                                <td width="40%">
+                                    <input
+                                            type="hidden"
+                                            class="form-control"
+                                            placeholder="Valor"
+                                            ng-value="animal.id"
+                                            name="animals[]"
+                                            required
+                                            >
+                                    <input
+                                            type="number"
+                                            class="form-control"
+                                            placeholder="Valor"
+                                            ng-model="animal.amount"
+                                            name="amounts[]"
+                                            required
+                                            >
                                 <span
                                         class="error"
                                         ng-show=""
                                         >
                                     Este valor es requerido
                                 </span>
-                            </td>
-                            <td>
-                                <button type="button"
-                                        class="btn btn-danger"
-                                        ng-click="removeFromTicket($index)">
-                                    <i class="fa fa-remove"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                </td>
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-danger"
+                                            ng-click="removeFromTicket($index)">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div class="text-center">
 
@@ -155,6 +157,8 @@
             imgUrl : '{{ asset('img/animals') }}'
         };
 
+        var moveScroll = false;
+
         $('#newAnimalNumber').focus();
 
         $(window).ready(function () {
@@ -165,6 +169,13 @@
                     $('#formAnimal').submit();
                 }
             })
+
+            window.setInterval(function() {
+                if (moveScroll) {
+                    $('#spaceAnimalTicket').scrollTop(99999);
+                    moveScroll = false;
+                }
+            }, 500)
         });
     </script>
 @endsection
