@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Ticket;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use PDF;
+use Auth;
 
 class ReportController extends Controller
 {
@@ -39,13 +41,17 @@ class ReportController extends Controller
         $dateStart->setTime(00,00,00);
         $dateEnd->setTime(23,59,59);
 
-        $tickets = Ticket::where('created_at', '>=', $dateStart)
+        $report = Ticket::where('created_at', '>=', $dateStart)
             ->where('created_at', '<=', $dateEnd)
             ->where('status', '<>', Ticket::STATUS_NULL)
             ->orderBy('created_at', 'DESC')
-            ->get()
         ;
 
+        if (Auth::user()->level == User::LEVEL_USER) {
+            $report->where('user_id', Auth::user()->id);
+        }
+
+        $tickets = $report->get();
         $totalAmount = 0;
         $totalGainAmount = 0;
 
