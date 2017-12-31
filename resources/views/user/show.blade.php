@@ -40,8 +40,8 @@
 
         @foreach($ticket->dailySorts as $dailySort)
             <div class="col-sm-3">
-                <p>{{ $dailySort->sort->description . ' - ' . $dailySort->getDateSort()->format('d-m-Y')  }}</p>
-                <p><strong>Ganador:</strong> {{ $dailySort->result ? $dailySort->result->animal->name : '-' }}</p>
+                <p>{{ $dailySort->sort->description . ' - ' . $dailySort->time_sort  }}</p>
+                <p><strong>Ganador:</strong> {{ ($animal = $dailySort->getAnimalGain()) ? $animal->name : '-' }}</p>
             </div>
         @endforeach
 
@@ -88,7 +88,7 @@
             <div class="col-xs-6 col-sm-3">
                 <p>
                     <img
-                            src="{{ asset('img/animals/' . $animal->getClearName() . '.jpg') }}"
+                            src="{{ asset('img/' . $ticket->dailySorts[0]->sort->folder. '/' . $animal->getClearName() . '.jpg') }}"
                             alt="{{ $animal->name }}"
                             style="max-width: 50px">
                     {{ $animal->name }}

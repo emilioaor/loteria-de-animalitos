@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ResetDailySorts::class
+        //ResetDailySorts::class
     ];
 
     /**
@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(ResetDailySorts::class)->dailyAt('00:00');
+        //$schedule->command(ResetDailySorts::class)->dailyAt('00:00');
     }
 
     /**

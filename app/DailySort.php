@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailySort extends Model
 {
-    /** Estatus de sorteos */
-    const STATUS_ACTIVE = 'Activo';
-    const STATUS_CLOSE = 'Cerrado';
-
     protected $table = 'daily_sort';
 
     protected $fillable = [
-        'sort_id', 'date_sort', 'status'
+        'sort_id', 'time_sort',
     ];
 
     /**
@@ -37,25 +33,12 @@ class DailySort extends Model
     }
 
     /**
-     * Retorna el resultado del sorteo
+     * Retorna los resultados para este sorteo
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function result() {
-        return $this->hasOne('App\Result', 'daily_sort_id');
-    }
-
-    /**
-     * Retorna fecha en DateTime
-     *
-     * @return \DateTime
-     */
-    public function getDateSort() {
-        if ($this->date_sort instanceof \DateTime) {
-            return $this->date_sort;
-        }
-
-        return \DateTime::createFromFormat('Y-m-d H:i:s', $this->date_sort);
+    public function results() {
+        return $this->hasMany('App\Result', 'daily_sort_id');
     }
 
     /**
@@ -66,10 +49,90 @@ class DailySort extends Model
      */
     public function totalTickets() {
         $total = 0;
-        foreach ($this->tickets as $ticket) {
-            $total += $ticket->amount();
+        $start = (new \DateTime())->setTime(0, 0, 0);
+        $end = (new \DateTime())->setTime(23, 59, 59);
+
+        $tickets = $this->tickets()
+            ->where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
+            ->get();
+
+        foreach ($tickets as $ticket) {
+            $total += ($ticket->amount() / count($ticket->dailySorts));
         }
 
         return $total;
+    }
+
+    /**
+     * Indica si el sorteo esta activo
+     *
+     * @return bool
+     */
+    public function hasActive()
+    {
+        // Hora actual
+        $now = (new \DateTime());
+        // 10 minutos antes del sorteo
+        $timeSort = \DateTime::createFromFormat('H:i:s', $this->time_sort)->modify('-10 minutes');
+
+        if ($timeSort > $now) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Retorna el animal ganador de hoy para este sorteo
+     *
+     * @return mixed|null
+     */
+    public function getAnimalGain()
+    {
+        $result = $this->getResultToday();
+
+        if ($result) {
+            return $result->animal;
+        }
+
+        return null;
+    }
+
+    /**
+     * Obtengo el resultado de hoy para este sorteo
+     *
+     * @return Model|null|static
+     */
+    public function getResultToday()
+    {
+        $start = (new \DateTime())->setTime(0, 0, 0);
+        $end = (new \DateTime())->setTime(23, 59, 59);
+
+        // Obtengo el resultado de este sorteo para hoy
+        return $this->results()
+            ->where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
+            ->first();
+    }
+
+    /**
+     * Obtengo el resultado de este sorteo para la fecha
+     * especificada
+     *
+     * @param \DateTime $date, fecha en que se busca el resultado
+     * @return Model|null|static
+     */
+    public function getResultToDate(\DateTime $date)
+    {
+        $start = $date->setTime(0, 0, 0);
+        $end = clone $date;
+        $end->setTime(23, 59, 59);
+
+        // Obtengo el resultado de este sorteo para hoy
+        return $this->results()
+            ->where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
+            ->first();
     }
 }

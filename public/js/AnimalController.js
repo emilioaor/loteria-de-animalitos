@@ -8,10 +8,12 @@ angular.module('AnimalModule').controller('AnimalController', [
                 required : false
             };
             $scope.data.animalsTicket.push(animal);
+            $scope.getTotal();
         };
 
         $scope.removeFromTicket = (index) => {
             $scope.data.animalsTicket.splice(index, 1);
+            $scope.getTotal();
         };
 
         $scope.hasTicket = (id) => {
@@ -94,6 +96,7 @@ angular.module('AnimalModule').controller('AnimalController', [
                 $scope.newAnimal = {};
                 $('#newAnimalNumber').focus();
             }
+            $scope.getTotal();
         };
         
         $scope.hasSelectedSort = function () {
@@ -106,9 +109,31 @@ angular.module('AnimalModule').controller('AnimalController', [
             return false;
         };
 
+        $scope.getTotal = function() {
+            var total = 0;
+            var animal;
+            var activeSorts = 0;
+
+            // Cuento los sorteos activos
+            for (var s in $scope.data.sorts) {
+                if ($scope.data.sorts[s]) {
+                    activeSorts++;
+                }
+            }
+            // Acumulo el monto de los animalitos seleccionados
+            for (var i in $scope.data.animalsTicket) {
+                animal = $scope.data.animalsTicket[i];
+
+                total += animal.amount;
+            }
+
+            $scope.total =  total * activeSorts;
+        };
+
         $scope.data = data;
         $scope.data.animalsTicket = [];
         $scope.newAnimal = {};
         $scope.styleAnimalAdd = {};
+        $scope.total = 0;
     }])
 ;

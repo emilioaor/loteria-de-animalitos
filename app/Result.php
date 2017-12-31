@@ -18,7 +18,7 @@ class Result extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function dailySort() {
-        return $this->hasOne('App\DailySort', 'daily_sort_id');
+        return $this->belongsTo('App\DailySort', 'daily_sort_id');
     }
 
     /**

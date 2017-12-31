@@ -35,6 +35,7 @@
                     <th>Creado</th>
                     <th>Estatus</th>
                     <th>Taquilla</th>
+                    <th>Sorteo</th>
                     <th style="text-align: center">Jugado</th>
                     <th style="text-align: center">Ganado</th>
                 </tr>
@@ -47,6 +48,7 @@
                         <td>{{ date_format($ticket->created_at, 'd-m-Y h:m:s a') }}</td>
                         <td>{{ $ticket->status }}</td>
                         <td>{{ $ticket->user->name }}</td>
+                        <td>{{ $ticket->dailySorts[0]->sort->description }}</td>
                         <td style="text-align: center">{{ number_format($ticket->amount(), 2, ',', '.') }}</td>
                         <td style="text-align: center">{{ number_format($ticket->payToGain(), 2, ',', '.') }}</td>
                     </tr>
@@ -59,18 +61,20 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th style="text-align: center">{{ number_format($totalAmount, '2', ',', '.') }}</th>
                     <th style="text-align: center">{{ number_format($totalGainAmount, '2', ',', '.') }}</th>
                 </tr>
 
                 <tr>
-                    <th colspan="6">
+                    <th colspan="7">
                         <hr>
                     </th>
                 </tr>
 
                 <tr>
                     <th>BALANCE</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>

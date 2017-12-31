@@ -15,28 +15,32 @@
             <table class="table table-responsive">
                 <thead>
                     <tr>
-                        <th width="20%">Sorteo</th>
-                        <th width="20%">Fecha</th>
-                        <th width="20%">Estatus del sorteo</th>
-                        <th width="20%">Total jugado</th>
-                        <th width="20%">Ganador</th>
+                        <th width="25%">Sorteo</th>
+                        <th width="25%">Estatus del sorteo</th>
+                        <th width="25%">Total jugado</th>
+                        <th width="25%">Ganador</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($dailySorts as $dailySort)
                         <tr>
-                            <td>{{ $dailySort->sort->description }}</td>
-                            <td>{{ $dailySort->getDateSort()->format('d-m-Y') }}</td>
-                            <td>{{ $dailySort->status }}</td>
+                            <td>{{ $dailySort->sort->description . ' - ' . $dailySort->time_sort }}</td>
+                            <td>
+                                @if($dailySort->hasActive())
+                                    <span class="text-success bg-success">Activo</span>
+                                @else
+                                    <span class="text-danger bg-danger">Cerrado</span>
+                                @endif
+                            </td>
                             <td>{{ number_format($dailySort->totalTickets(), 2, ',', '.') }}</td>
                             <td>
-                                @if($dailySort->result)
+                                @if($animal = $dailySort->getAnimalGain())
                                     <img
-                                            src="{{ asset('img/animals/' . $dailySort->result->animal->getClearName() . '.jpg') }}"
-                                            alt="{{ $dailySort->result->animal->name }}"
+                                            src="{{ asset('img/' . $dailySort->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
+                                            alt="{{ $animal->name }}"
                                             style="max-width: 30px">
-                                    {{ $dailySort->result->animal->name }}
+                                    {{ $animal->name }}
                                 @else
                                     -
                                 @endif
@@ -48,7 +52,11 @@
                                             class="btn btn-primary-color"
                                             data-toggle="modal"
                                             data-target="#animalsModal"
-                                            onclick="updateFormAction('{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}')">
+                                            onclick="updateFormAction('{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}')"
+                                            @if($dailySort->hasActive())
+                                                disabled
+                                            @endif
+                                            >
                                         <i class="glyphicon glyphicon-ok-sign"></i>
                                     </button>
                                 @endif
@@ -60,14 +68,6 @@
 
         </div>
 
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="text-center">
-                {{ $dailySorts->render() }}
-            </div>
-        </div>
     </div>
 
     @if(Auth::user()->level === \App\User::LEVEL_ADMIN)
@@ -93,7 +93,7 @@
                                             ng-click="selectedAnimal = {{ $animal->id }}">
                                         <p>
                                             <img
-                                                    src="{{ asset('img/animals/' . $animal->getClearName() . '.jpg') }}"
+                                                    src="{{ asset('img/' . $dailySorts[0]->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
                                                     alt="{{ $animal->name }}"
                                                     style="max-width: 38px">
                                             {{ $animal->name }}

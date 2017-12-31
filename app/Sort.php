@@ -9,7 +9,7 @@ class Sort extends Model
     protected $table = 'sorts';
 
     protected $fillable = [
-        'time_sort', 'description', 'pay_per_100'
+        'description', 'pay_per_100', 'folder',
     ];
 
     /**
@@ -22,36 +22,12 @@ class Sort extends Model
     }
 
     /**
-     * Retorna el ultimo sorteo diario asociado
-     * a este sorteo
+     * Todos los animalitos de este sorteo
      *
-     * @return Model|null|static
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getLastDailySort() {
-        return $this->dailySorts()
-            ->orderBy('daily_sort.date_sort', 'DESC')
-            ->first()
-        ;
-    }
-
-    /**
-     * Verifica si hay un sorteo diario registrado para hoy
-     *
-     * @return bool
-     */
-    public function hasDailySortToday() {
-        $startDate = (new \DateTime('now'))->setTime(0, 0, 0);
-        $endDate = (new \DateTime('now'))->setTime(23, 59, 59);
-        $dailySort = $this->getLastDailySort();
-
-        if (! $dailySort) {
-            return false;
-        }
-
-        if ($dailySort->getDateSort() >= $startDate && $dailySort->getDateSort() <= $endDate) {
-            return true;
-        }
-
-        return false;
+    public function animals()
+    {
+        return $this->hasMany('App\Animal', 'sort_id');
     }
 }

@@ -17,7 +17,7 @@ class ResultController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index() {
-        $dailySorts = DailySort::orderBy('created_at', 'DESC')->paginate(20);
+        $dailySorts = DailySort::orderBy('sort_id')->orderBy('time_sort')->get();
         $animals = Animal::all();
 
         return view('user.result.index')->with([
@@ -35,9 +35,8 @@ class ResultController extends Controller
      */
     public function animalGain($dailySortId, Request $request) {
         $dailySort = DailySort::find($dailySortId);
-        $result = $dailySort->result;
 
-        if (! $result) {
+        if (! ($result = $dailySort->getResultToday())) {
             $result = new Result();
             $result->daily_sort_id = $dailySortId;
         }

@@ -17,8 +17,7 @@ class CreateTableDailySort extends Migration
             $table->increments('id');
             $table->integer('sort_id')->unsigned();
             $table->foreign('sort_id')->references('id')->on('sorts');
-            $table->dateTime('date_sort');
-            $table->string('status', 20);
+            $table->time('time_sort');
             $table->timestamps();
         });
     }

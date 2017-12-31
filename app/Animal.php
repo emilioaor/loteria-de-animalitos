@@ -9,7 +9,7 @@ class Animal extends Model
     protected $table = 'animals';
 
     protected $fillable = [
-        'name', 'number',
+        'name', 'number', 'sort_id'
     ];
 
     /**
@@ -30,8 +30,19 @@ class Animal extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function results() {
+    public function results()
+    {
         return $this->hasMany('App\Result', 'animal_id');
+    }
+
+    /**
+     * Sorteo al que pertenece este animal
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sort()
+    {
+        return $this->belongsTo('App\Sort', 'sort_id');
     }
 
     /**

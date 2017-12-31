@@ -32,10 +32,6 @@ Route::group(['prefix' => 'user', 'middleware' => 'user'], function() {
 
 //  RUTAS ADMIN
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
-    Route::put('sorts/upAll', ['uses' => 'Admin\SortController@upAll', 'as' => 'sorts.upAll']);
-    Route::get('sorts/downAll', ['uses' => 'Admin\SortController@downAll', 'as' => 'sorts.downAll']);
-    Route::get('sorts/downSort/{sort}', ['uses' => 'Admin\SortController@downSort', 'as' => 'sorts.downSort']);
-    Route::get('sorts/upSort/{sort}', ['uses' => 'Admin\SortController@upSort', 'as' => 'sorts.upSort']);
     Route::resource('sorts', 'Admin\SortController');
     Route::put('/results/animalGain/{dailySort}', ['uses' => 'User\ResultController@animalGain', 'as' => 'results.animalGain']);
 });

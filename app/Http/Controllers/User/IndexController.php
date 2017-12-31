@@ -27,21 +27,12 @@ class IndexController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index() {
+        $sorts = DailySort::orderBy('time_sort')->get();
         $animals = Animal::all();
-        $dailySorts = [];
-
-        $sorts = Sort::all();
-
-        foreach ($sorts as $sort) {
-            $ds = $sort->getLastDailySort();
-            if ($ds && $ds->status === DailySort::STATUS_ACTIVE) {
-                $dailySorts[] = $ds;
-            }
-        }
 
         return view('user.create')->with([
+            'sorts' => $sorts,
             'animals' => $animals,
-            'sorts' => $dailySorts,
         ]);
     }
 
@@ -65,7 +56,7 @@ class IndexController extends Controller
             foreach ($request->sorts as $id => $ds) {
                 $dailySort = DailySort::find($id);
 
-                if ($dailySort->status == DailySort::STATUS_CLOSE) {
+                if (! $dailySort->hasActive()) {
                     DB::rollback();
                     $this->sessionMessages('Este ticket posee sorteos cerrados', 'alert-danger');
 
@@ -78,6 +69,7 @@ class IndexController extends Controller
             $ticket->public_id = 'TICK00' . (Ticket::all()->count() + 1);
             $ticket->user_id = Auth::user()->id;
             $ticket->status = Ticket::STATUS_ACTIVE;
+            $ticket->pay_per_100 = $dailySort->sort->pay_per_100;
             $ticket->save();
             $ticket->dailySorts()->sync(array_keys($request->sorts));
 
@@ -143,6 +135,13 @@ class IndexController extends Controller
      */
     public function payTicket($ticketId) {
         $ticket = Ticket::find($ticketId);
+
+        if (! $ticket->allSortClosed()) {
+            $this->sessionMessages('Deben cerrar todos los sorteos asociados al ticket' ,'alert-danger');
+
+            return redirect()->route('user.show', ['ticket' => $ticketId]);
+        }
+
         $ticket->status = Ticket::STATUS_PAY;
         $ticket->save();
 

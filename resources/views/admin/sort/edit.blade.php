@@ -23,8 +23,16 @@
 
             <div class="col-sm-3">
                 <div class="form-group">
-                    <label for="description">Nombre descriptivo</label>
-                    <input type="text" class="form-control" name="description" id="description" value="{{ $sort->description }}" placeholder="Nombre descriptivo">
+                    <label for="sort_id">Sorteo</label>
+                    <select name="sort_id" id="sort_id" class="form-control">
+                        @foreach($sorts as $s)
+                            @if($s->id === $sort->sort_id)
+                                <option value="{{ $s->id }}" selected>{{ $s->description }}</option>
+                            @else
+                                <option value="{{ $s->id }}">{{ $s->description }}</option>
+                            @endif
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -37,23 +45,17 @@
 
             <div class="col-sm-3">
                 <div class="form-group">
-                    <label for="pay_per_100">Pago por 100</label>
-                    <input type="number" class="form-control" name="pay_per_100" id="pay_per_100" value="{{ $sort->pay_per_100 }}" placeholder="Pago por 100" required>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="pay_per_100">Sorteo actual</label>
+                    <label>Estatus</label>
                     <p>
-                        @if(($dailySort = $sort->getLastDailySort()))
-                            {{ $dailySort->getDateSort()->format('d-m-Y') }}
+                        @if($sort->hasActive())
+                            <span class="text-success bg-success">Activo</span>
                         @else
-                            -
+                            <span class="text-danger bg-danger">Cerrado</span>
                         @endif
                     </p>
                 </div>
             </div>
+
         </div>
 
         <div class="row">
@@ -61,16 +63,6 @@
                 <button class="btn btn-primary-color">
                     <i class="fa fa-fw fa-save"></i> Actualizar
                 </button>
-
-                @if(($dailySort = $sort->getLastDailySort()) && $dailySort->status === \App\DailySort::STATUS_ACTIVE)
-                    <a href="{{ route('sorts.downSort', ['sort' => $sort->id]) }}" class="btn btn-danger">
-                        <i class="fa fa-fw fa-arrow-down"></i> Cerrar sorteo actual
-                    </a>
-                @else
-                    <a href="{{ route('sorts.upSort', ['sort' => $sort->id]) }}" class="btn btn-primary">
-                        <i class="fa fa-fw fa-arrow-up"></i> Activar sorteo actual
-                    </a>
-                @endif
             </div>
         </div>
 

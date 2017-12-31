@@ -13,7 +13,7 @@ class Ticket extends Model
     protected $table = 'tickets';
 
     protected $fillable = [
-        'public_id','date','user_id',
+        'public_id','date','user_id', 'pay_per_100',
     ];
 
     /**
@@ -83,7 +83,7 @@ class Ticket extends Model
     public function isGain() {
         foreach ($this->dailySorts as $dailySort) {
 
-            $result = $dailySort->result;
+            $result = $dailySort->getResultToDate($this->created_at);
 
             if (! $result) {
                 continue;
@@ -109,17 +109,17 @@ class Ticket extends Model
         $total = 0;
         foreach ($this->dailySorts as $dailySort) {
 
-            if (! $dailySort->result) {
+            if (! ($result = $dailySort->getResultToDate($this->created_at))) {
                 continue;
             }
 
-            $animalGain = $dailySort->result->animal;
+            $animalGain = $result->animal;
             $amount = 0;
             foreach ($this->animals as $animal) {
                 if ($animal->id === $animalGain->id) {
                     $amount = $animal->pivot->amount;
                     $div = $amount /100;
-                    $amount = $div * $dailySort->sort->pay_per_100;
+                    $amount = $div * $this->pay_per_100;
                 }
             }
 
@@ -127,5 +127,27 @@ class Ticket extends Model
         }
 
         return $total;
+    }
+
+    /**
+     * Indica si ya cerraron todos los sorteos
+     * asociados a este ticket
+     *
+     * @return bool
+     */
+    public function allSortClosed()
+    {
+        $now = new \DateTime();
+
+        foreach ($this->dailySorts as $dailySort) {
+            $dateFormat = $this->created_at->format('Y-m-d') . ' ' . $dailySort->time_sort;
+            $date = \DateTime::createFromFormat('Y-m-d H:i:s', $dateFormat);
+
+            if ($date > $now) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

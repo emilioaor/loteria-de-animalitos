@@ -73,17 +73,20 @@
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <label for="sort_id">Sorteos</label>
+
                         </div>
                         @foreach($sorts as $dailySort)
-                            <div class="col-sm-4">
-                                <input
-                                        type="checkbox"
-                                        name="sorts[{{ $dailySort->id }}]"
-                                        ng-model="data.sorts[{{ $dailySort->id }}]"
-                                        ng-init="data.sorts[{{ $dailySort->id }}]=false">
-                                {{ $dailySort->sort->description . '-' . $dailySort->sort->time_sort }}
-                            </div>
+                            @if($dailySort->hasActive())
+                                <div class="col-sm-4">
+                                    <input
+                                            type="checkbox"
+                                            name="sorts[{{ $dailySort->id }}]"
+                                            ng-model="data.sorts[{{ $dailySort->id }}]"
+                                            ng-init="data.sorts[{{ $dailySort->id }}]=false"
+                                            ng-change="getTotal()">
+                                    {{ $dailySort->time_sort }}
+                                </div>
+                            @endif
                         @endforeach
                     </div>
 
@@ -93,42 +96,55 @@
                     <div id="spaceAnimalTicket" style="max-height: 250px; overflow: auto; width: 100%; margin-bottom: 10px;">
                         <table class="table">
                             <tbody>
-                            <tr ng-repeat="animal in data.animalsTicket">
-                                <td width="10%">[[ $index + 1 ]]</td>
-                                <td width="50%">[[ animal.number + ' - ' + animal.name ]]</td>
-                                <td width="40%">
-                                    <input
-                                            type="hidden"
-                                            class="form-control"
-                                            placeholder="Valor"
-                                            ng-value="animal.id"
-                                            name="animals[]"
-                                            required
+                                <tr ng-repeat="animal in data.animalsTicket">
+                                    <td width="10%">[[ $index + 1 ]]</td>
+                                    <td width="50%">[[ animal.number + ' - ' + animal.name ]]</td>
+                                    <td width="40%">
+                                        <input
+                                                type="hidden"
+                                                class="form-control"
+                                                placeholder="Valor"
+                                                ng-value="animal.id"
+                                                name="animals[]"
+                                                required
+                                                >
+                                        <input
+                                                type="number"
+                                                class="form-control"
+                                                placeholder="Valor"
+                                                ng-model="animal.amount"
+                                                name="amounts[]"
+                                                ng-change="getTotal()"
+                                                required
+                                                >
+                                    <span
+                                            class="error"
+                                            ng-show=""
                                             >
-                                    <input
-                                            type="number"
-                                            class="form-control"
-                                            placeholder="Valor"
-                                            ng-model="animal.amount"
-                                            name="amounts[]"
-                                            required
-                                            >
-                                <span
-                                        class="error"
-                                        ng-show=""
-                                        >
-                                    Este valor es requerido
-                                </span>
-                                </td>
-                                <td>
-                                    <button type="button"
-                                            class="btn btn-danger"
-                                            ng-click="removeFromTicket($index)">
-                                        <i class="fa fa-remove"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                                        Este valor es requerido
+                                    </span>
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-danger"
+                                                ng-click="removeFromTicket($index)">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <span ng-if="data.animalsTicket.length">
+                                            [[ total ]] Bsf
+                                        </span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
 
@@ -138,7 +154,7 @@
                                 class="btn btn-lg btn-primary-color"
                                 ng-show="data.animalsTicket.length"
                                 ng-disabled="! hasSelectedSort()">
-                            <i class="fa fa-save"></i> Guardar ticket (F2)
+                            <i class="fa fa-save"></i> Guardar ticket
                         </button>
                     </div>
                 </form>
@@ -154,7 +170,7 @@
     <script>
         var data = {
             animalsList : {!! json_encode($animals) !!},
-            imgUrl : '{{ asset('img/animals') }}'
+            imgUrl : '{{ asset('img/' . $sorts[0]->sort->folder) }}'
         };
 
         var moveScroll = false;
@@ -162,13 +178,6 @@
         $('#newAnimalNumber').focus();
 
         $(window).ready(function () {
-
-            $(window).on('keydown', function(evt) {
-                var countTickets = [[ data.animalsTicket.length ]];
-                if (evt.keyCode == 113 && countTickets > 0) {
-                    $('#formAnimal').submit();
-                }
-            })
 
             window.setInterval(function() {
                 if (moveScroll) {

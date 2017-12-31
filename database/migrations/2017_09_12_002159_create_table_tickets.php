@@ -19,6 +19,7 @@ class CreateTableTickets extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('status', 20);
+            $table->float('pay_per_100');
             $table->timestamps();
         });
     }

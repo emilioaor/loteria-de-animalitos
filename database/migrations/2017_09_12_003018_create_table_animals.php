@@ -17,6 +17,8 @@ class CreateTableAnimals extends Migration
             $table->increments('id');
             $table->string('name', 15)->unique();
             $table->string('number', 3)->unique();
+            $table->integer('sort_id')->unsigned();
+            $table->foreign('sort_id')->references('id')->on('sorts');
             $table->timestamps();
         });
 
