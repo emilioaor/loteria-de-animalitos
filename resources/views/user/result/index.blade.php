@@ -93,7 +93,9 @@
                                             ng-click="selectedAnimal = {{ $animal->id }}">
                                         <p>
                                             <img
-                                                    src="{{ asset('img/' . $dailySorts[0]->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
+                                                    @if(isset($dailySorts[0]))
+                                                        src="{{ asset('img/' . $dailySorts[0]->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
+                                                    @endif
                                                     alt="{{ $animal->name }}"
                                                     style="max-width: 38px">
                                             {{ $animal->name }}

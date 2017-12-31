@@ -124,7 +124,9 @@ angular.module('AnimalModule').controller('AnimalController', [
             for (var i in $scope.data.animalsTicket) {
                 animal = $scope.data.animalsTicket[i];
 
-                total += animal.amount;
+                if (parseFloat(animal.amount)) {
+                    total += animal.amount;
+                }
             }
 
             $scope.total =  total * activeSorts;

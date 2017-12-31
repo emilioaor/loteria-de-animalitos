@@ -28,10 +28,19 @@ class IndexController extends Controller
      */
     public function index() {
         $sorts = DailySort::orderBy('time_sort')->get();
+        $activeSorts = [];
+
+        // Filtro solo los sorteos activos
+        foreach ($sorts as $sort) {
+            if ($sort->hasActive()) {
+                $activeSorts[] = $sort;
+            }
+        }
+
         $animals = Animal::all();
 
         return view('user.create')->with([
-            'sorts' => $sorts,
+            'sorts' => $activeSorts,
             'animals' => $animals,
         ]);
     }
