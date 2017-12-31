@@ -18,6 +18,7 @@ class CreateTableSorts extends Migration
             $table->string('description');
             $table->decimal('pay_per_100');
             $table->string('folder', 20);
+            $table->decimal('daily_limit');
             $table->timestamps();
         });
     }

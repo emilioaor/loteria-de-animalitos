@@ -18,6 +18,7 @@ class AnimalSeeder extends Seeder
         $sort->description = 'Lotto Activo';
         $sort->pay_per_100 = 3000;
         $sort->folder = 'lottoActivo';
+        $sort->daily_limit = 10000;
         $sort->save();
 
         // Cargando los animales

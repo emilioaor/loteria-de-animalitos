@@ -8,7 +8,7 @@
     @if(count($sorts))
         <div class="row section-animals" ng-controller="AnimalController">
 
-            <div class="col-xs-6 col-sm-7">
+            <div class="col-xs-6 col-sm-6">
                 <div class="row">
                     <!-- Lista de animalitos -->
                     <div class="col-sm-6 col-md-4 section-animals__item" ng-repeat="animal in data.animalsList">
@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-6 col-sm-5">
+            <div class="col-xs-6 col-sm-6">
 
                 <div class="section-float">
                     <!-- Agregar por numero -->
@@ -99,7 +99,13 @@
                                 <tbody>
                                 <tr ng-repeat="animal in data.animalsTicket">
                                     <td width="10%">[[ $index + 1 ]]</td>
-                                    <td width="50%">[[ animal.number + ' - ' + animal.name ]]</td>
+                                    <td width="30%">[[ animal.number + ' - ' + animal.name ]]</td>
+                                    <td width="20%">
+                                        <span class="text-danger" ng-if="animal.limitError">
+                                            <strong>Limite:</strong>
+                                            [[ animal.limit ]]
+                                        </span>
+                                    </td>
                                     <td width="40%">
                                         <input
                                                 type="hidden"
@@ -138,6 +144,7 @@
                                 <tr>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>
                                         <span ng-if="data.animalsTicket.length">
                                             [[ total ]] Bsf
@@ -154,7 +161,7 @@
                             <button
                                     class="btn btn-lg btn-primary-color"
                                     ng-show="data.animalsTicket.length"
-                                    ng-disabled="! hasSelectedSort()">
+                                    ng-disabled="! hasSelectedSort() || hasLimitError()">
                                 <i class="fa fa-save"></i> Guardar ticket
                             </button>
                         </div>

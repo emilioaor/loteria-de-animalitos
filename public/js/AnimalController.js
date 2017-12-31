@@ -113,6 +113,7 @@ angular.module('AnimalModule').controller('AnimalController', [
             var total = 0;
             var animal;
             var activeSorts = 0;
+            var amount;
 
             // Cuento los sorteos activos
             for (var s in $scope.data.sorts) {
@@ -125,11 +126,39 @@ angular.module('AnimalModule').controller('AnimalController', [
                 animal = $scope.data.animalsTicket[i];
 
                 if (parseFloat(animal.amount)) {
+                    amount = animal.amount * activeSorts;
                     total += animal.amount;
+
+                    if (amount > animal.limit) {
+                        animal.limitError = true;
+                    } else {
+                        animal.limitError = false;
+                    }
                 }
             }
 
             $scope.total =  total * activeSorts;
+        };
+
+        $scope.hasLimitError = function() {
+            var animal;
+            var activeSorts = 0;
+            // Cuento los sorteos activos
+            for (var s in $scope.data.sorts) {
+                if ($scope.data.sorts[s]) {
+                    activeSorts++;
+                }
+            }
+
+            for (var i in $scope.data.animalsTicket) {
+                animal = $scope.data.animalsTicket[i];
+
+                if (animal.limitError) {
+                    return true;
+                }
+            }
+
+            return false;
         };
 
         $scope.data = data;

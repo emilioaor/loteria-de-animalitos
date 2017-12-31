@@ -38,10 +38,12 @@ class IndexController extends Controller
         }
 
         $animals = Animal::all();
+        $animals = $this->getDailyLimit($animals);
 
         return view('user.create')->with([
             'sorts' => $activeSorts,
             'animals' => $animals,
+
         ]);
     }
 
@@ -173,5 +175,36 @@ class IndexController extends Controller
         $this->sessionMessages('Ticket anulado');
 
         return redirect()->route('user.show', ['ticket' => $ticketId]);
+    }
+
+    /**
+     * Obtiene el limite disponible para cada animalito
+     *
+     * @param $animals
+     * @return array
+     */
+    private function getDailyLimit($animals)
+    {
+        $start = (new \DateTime())->setTime(0, 0, 0);
+        $end = (new \DateTime())->setTime(23, 59, 59);
+        // Obtengo todos los tickets de hoy
+        $tickets = Ticket::where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
+
+        foreach ($animals as $animal) {
+            if (! isset($animal->limit)) {
+                $animal->limit = floatval($animal->sort->daily_limit);
+            }
+
+            foreach ($tickets as $ticket) {
+                foreach ($ticket->animals as $ticketAnimal) {
+                    if ($ticketAnimal->id === $animal->id) {
+                        $animal->limit -= $ticketAnimal->pivot->amount * count($ticket->dailySorts);
+                    }
+                }
+            }
+
+        }
+
+        return $animals;
     }
 }

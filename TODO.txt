@@ -1,2 +1,1 @@
-//TODO limite por sorteo
 //TODO Probar con otro sorteos
