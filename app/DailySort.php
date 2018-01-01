@@ -64,6 +64,7 @@ class DailySort extends Model
         return $total;
     }
 
+
     /**
      * Indica si el sorteo esta activo
      *
@@ -134,5 +135,15 @@ class DailySort extends Model
             ->where('created_at', '>=', $start)
             ->where('created_at', '<=', $end)
             ->first();
+    }
+
+    /**
+     * Retorna la hora del sorteo en formato hora:minuto am/pm
+     *
+     * @return string
+     */
+    public function timeSortFormat()
+    {
+        return \DateTime::createFromFormat('H:i:s', $this->time_sort)->format('h:i a');
     }
 }

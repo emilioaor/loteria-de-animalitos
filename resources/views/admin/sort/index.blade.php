@@ -30,7 +30,7 @@
                     @foreach($sorts as $ds)
                         <tr>
                             <td>{{ $ds->sort->description }}</td>
-                            <td>{{ $ds->time_sort }}</td>
+                            <td>{{ $ds->timeSortFormat() }}</td>
                             <td>
                                 @if($ds->hasActive())
                                     <span class="text-success bg-success">Activo</span>

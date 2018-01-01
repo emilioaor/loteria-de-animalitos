@@ -48,7 +48,7 @@
                         <td>{{ date_format($ticket->created_at, 'd-m-Y h:m:s a') }}</td>
                         <td>{{ $ticket->status }}</td>
                         <td>{{ $ticket->user->name }}</td>
-                        <td>{{ $ticket->dailySorts[0]->sort->description }}</td>
+                        <td>{{ $ticket->dailySorts[0]->sort->description . ' - ' . $ticket->dailySorts[0]->timeSortFormat() }}</td>
                         <td style="text-align: center">{{ number_format($ticket->amount(), 2, ',', '.') }}</td>
                         <td style="text-align: center">{{ number_format($ticket->payToGain(), 2, ',', '.') }}</td>
                     </tr>

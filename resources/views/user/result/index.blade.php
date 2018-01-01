@@ -25,7 +25,7 @@
                 <tbody>
                     @foreach($dailySorts as $dailySort)
                         <tr>
-                            <td>{{ $dailySort->sort->description . ' - ' . $dailySort->time_sort }}</td>
+                            <td>{{ $dailySort->sort->description . ' - ' . $dailySort->timeSortFormat() }}</td>
                             <td>
                                 @if($dailySort->hasActive())
                                     <span class="text-success bg-success">Activo</span>

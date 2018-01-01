@@ -86,7 +86,7 @@
                                             ng-model="data.sorts[{{ $dailySort->id }}]"
                                             ng-init="data.sorts[{{ $dailySort->id }}]=false"
                                             ng-change="getTotal()">
-                                    {{ $dailySort->time_sort }}
+                                    {{ $dailySort->timeSortFormat() }}
                                 </div>
                             @endforeach
                         </div>
