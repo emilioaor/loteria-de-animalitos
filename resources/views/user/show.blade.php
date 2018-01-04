@@ -41,7 +41,7 @@
         @foreach($ticket->dailySorts()->orderBy('time_sort')->get() as $dailySort)
             <div class="col-sm-3">
                 <p>{{ $dailySort->sort->description . ' - ' . $dailySort->timeSortFormat()  }}</p>
-                <p><strong>Ganador:</strong> {{ ($animal = $dailySort->getAnimalGain()) ? $animal->name : '-' }}</p>
+                <p><strong>Ganador:</strong> {{ ($animal = $dailySort->getAnimalGainToDate($ticket->created_at)) ? $animal->name : '-' }}</p>
             </div>
         @endforeach
 

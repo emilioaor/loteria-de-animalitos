@@ -138,6 +138,24 @@ class DailySort extends Model
     }
 
     /**
+     * Obtengo el animalito ganador para el sorteo de la fecha
+     * especificada
+     *
+     * @param \DateTime $date
+     * @return mixed|null
+     */
+    public function getAnimalGainToDate(\DateTime $date)
+    {
+        $result = $this->getResultToDate($date);
+
+        if ($result) {
+            return $result->animal;
+        }
+
+        return null;
+    }
+
+    /**
      * Retorna la hora del sorteo en formato hora:minuto am/pm
      *
      * @return string
