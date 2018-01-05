@@ -8,7 +8,7 @@
     @if(count($sorts))
         <div class="row section-animals" ng-controller="AnimalController">
 
-            <div class="col-xs-6 col-sm-6">
+            <div class="col-xs-6 col-sm-7">
                 <div class="row">
                     <!-- Lista de animalitos -->
                     <div class="col-sm-6 col-md-4 section-animals__item" ng-repeat="animal in data.animalsList">
@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-6 col-sm-6">
+            <div class="col-xs-6 col-sm-5">
 
                 <div class="section-float">
                     <!-- Agregar por numero -->
