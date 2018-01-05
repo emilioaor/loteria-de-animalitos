@@ -1,10 +1,12 @@
 ----------------------------------
       LOTERIA DE ANIMALITOS
 ----------------------------------
-{{ strtoupper($ticket->dailySort->sort->description . ' ' . $ticket->dailySort->getDateSort()->format('d-m-Y') . ' ' . $ticket->dailySort->sort->time_sort) }}
 TICKET: {{ $ticket->public_id }}
 FECHA: {{ date_format($ticket->created_at, 'd-m-Y h:i a') }}
-TAQUILLA: {{ $ticket->user->name }}
+SORTEOS:
+@foreach($ticket->dailySorts as $dailySort)
+      {{ strtoupper($dailySort->sort->description . ' ' . $ticket->created_at->format('d-m-Y') . ' ' . $dailySort->sort->time_sort) }}
+@endforeach
 
 ANIMALITO                MONTO
 ----------------------------------
