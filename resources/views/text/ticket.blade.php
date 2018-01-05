@@ -5,7 +5,7 @@ TICKET: {{ $ticket->public_id }}
 FECHA: {{ date_format($ticket->created_at, 'd-m-Y h:i a') }}
 SORTEOS:
 @foreach($ticket->dailySorts as $dailySort)
-      {{ strtoupper($dailySort->sort->description . ' ' . $ticket->created_at->format('d-m-Y') . ' ' . $dailySort->sort->time_sort) }}
+{{ strtoupper($dailySort->sort->description . ' ' . $ticket->created_at->format('d-m-Y') . ' ' . $dailySort->time_sort) }}
 @endforeach
 
 ANIMALITO                MONTO
