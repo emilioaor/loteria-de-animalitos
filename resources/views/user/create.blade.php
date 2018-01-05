@@ -94,7 +94,7 @@
                         {{ csrf_field() }}
 
                                 <!-- Animalitos jugados -->
-                        <div id="spaceAnimalTicket" style="max-height: 250px; overflow: auto; width: 100%; margin-bottom: 10px;">
+                        <div id="spaceAnimalTicket" style="overflow: auto; width: 100%; margin-bottom: 10px;">
                             <table class="table">
                                 <tbody>
                                 <tr ng-repeat="animal in data.animalsTicket">
