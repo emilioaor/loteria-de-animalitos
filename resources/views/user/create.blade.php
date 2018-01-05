@@ -9,7 +9,7 @@
         <div class="row section-animals" ng-controller="AnimalController">
 
             <div class="col-xs-6 col-sm-7">
-                <div class="row">
+                <div class="row animal-list">
                     <!-- Lista de animalitos -->
                     <div class="col-sm-6 col-md-4 section-animals__item" ng-repeat="animal in data.animalsList">
                         <p class="text-center" ng-hide="hasTicket(animal.id);">
@@ -31,7 +31,7 @@
 
             <div class="col-xs-6 col-sm-5">
 
-                <div class="section-float">
+                <div class="">
                     <!-- Agregar por numero -->
                     <table class="table">
                         <tr>

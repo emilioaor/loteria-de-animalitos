@@ -89,6 +89,10 @@
 .section-animals > .col-sm-7 table {
     font-size: 16px;
 }
+.section-animals .animal-list {
+    max-height: 500px;
+    overflow: auto;
+}
 .section-animals > .col-sm-7 table .error {
     color: #f42a09;
     font-size: 12px;
