@@ -46,20 +46,18 @@
                                 @endif
                             </td>
                             <td>
-                                @if(Auth::user()->level === \App\User::LEVEL_ADMIN)
-                                    <button
-                                            type="button"
-                                            class="btn btn-primary-color"
-                                            data-toggle="modal"
-                                            data-target="#animalsModal"
-                                            onclick="updateFormAction('{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}')"
-                                            @if($dailySort->hasActive())
-                                                disabled
-                                            @endif
-                                            >
-                                        <i class="glyphicon glyphicon-ok-sign"></i>
-                                    </button>
-                                @endif
+                                <button
+                                        type="button"
+                                        class="btn btn-primary-color"
+                                        data-toggle="modal"
+                                        data-target="#animalsModal"
+                                        onclick="updateFormAction('{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}')"
+                                        @if($dailySort->hasActive())
+                                            disabled
+                                        @endif
+                                        >
+                                    <i class="glyphicon glyphicon-ok-sign"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -70,61 +68,60 @@
 
     </div>
 
-    @if(Auth::user()->level === \App\User::LEVEL_ADMIN)
-        <!-- Modal -->
-        <div id="animalsModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Selecciona el animalito ganador <i class="glyphicon glyphicon-ok-sign"></i></h4>
+    <!-- Modal -->
+    <div id="animalsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Selecciona el animalito ganador <i class="glyphicon glyphicon-ok-sign"></i></h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        @foreach($animals as $animal)
+                            <div class="col-xs-4 col-sm-3">
+                                <a
+                                        href=""
+                                        onclick="changeAnimalId({{ $animal->id  }});"
+                                        ng-click="selectedAnimal = {{ $animal->id }}">
+                                    <p>
+                                        <img
+                                                @if(isset($dailySorts[0]))
+                                                    src="{{ asset('img/' . $dailySorts[0]->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
+                                                @endif
+                                                alt="{{ $animal->name }}"
+                                                style="max-width: 38px">
+                                        {{ $animal->name }}
+                                        <i class="fa fa-check" ng-show="selectedAnimal == {{ $animal->id }}"></i>
+                                    </p>
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
-                    <div class="modal-body">
 
-                        <div class="row">
+                    <div class="text-center">
 
-                            @foreach($animals as $animal)
-                                <div class="col-xs-4 col-sm-3">
-                                    <a
-                                            href=""
-                                            onclick="changeAnimalId({{ $animal->id  }});"
-                                            ng-click="selectedAnimal = {{ $animal->id }}">
-                                        <p>
-                                            <img
-                                                    @if(isset($dailySorts[0]))
-                                                        src="{{ asset('img/' . $dailySorts[0]->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
-                                                    @endif
-                                                    alt="{{ $animal->name }}"
-                                                    style="max-width: 38px">
-                                            {{ $animal->name }}
-                                            <i class="fa fa-check" ng-show="selectedAnimal == {{ $animal->id }}"></i>
-                                        </p>
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
+                        <form action="" method="post" id="animalForm">
+                            {{ csrf_field() }}
+                            {{ method_field('PUT') }}
 
-                        <div class="text-center">
+                            <input type="hidden" id="animal_id" name="animal_id">
 
-                            <form action="" method="post" id="animalForm">
-                                {{ csrf_field() }}
-                                {{ method_field('PUT') }}
-
-                                <input type="hidden" id="animal_id" name="animal_id">
-
-                                <button class="btn btn-primary-color" id="btnSaveAnimal" disabled>
-                                    <i class="fa fa-fw fa-save"></i> Guardar
-                                </button>
-                            </form>
-                        </div>
+                            <button class="btn btn-primary-color" id="btnSaveAnimal" disabled>
+                                <i class="fa fa-fw fa-save"></i> Guardar
+                            </button>
+                        </form>
                     </div>
                 </div>
-
             </div>
+
         </div>
-    @endif
+    </div>
 
 @endsection
 

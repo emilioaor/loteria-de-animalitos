@@ -28,10 +28,10 @@ Route::group(['prefix' => 'user', 'middleware' => 'user'], function() {
     Route::resource('/ticketOffice', 'Admin\TicketOfficeController');
     Route::get('report', ['uses' => 'User\ReportController@index', 'as' => 'user.report']);
     Route::get('report/generate', ['uses' => 'User\ReportController@generateDailyReport', 'as' => 'user.report.generate']);
+    Route::put('/results/animalGain/{dailySort}', ['uses' => 'User\ResultController@animalGain', 'as' => 'results.animalGain']);
 });
 
 //  RUTAS ADMIN
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
     Route::resource('sorts', 'Admin\SortController');
-    Route::put('/results/animalGain/{dailySort}', ['uses' => 'User\ResultController@animalGain', 'as' => 'results.animalGain']);
 });
