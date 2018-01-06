@@ -10,7 +10,18 @@
 
         <div class="col-xs-12">
 
-            <h3>Ultimos resultados</h3>
+            <h3>Resultados de {{ $date->format('d-m-Y') }}</h3>
+            <div class="row">
+                <div class="col-sm-5">
+                    <input
+                            type="date"
+                            id="date"
+                            class="form-control"
+                            value="{{ $date->format('Y-m-d') }}"
+                            max="{{ $now->format('Y-m-d') }}"
+                            onchange="location.href = '{{ route('results.index') }}?date=' + $('#date').val()">
+                </div>
+            </div>
             <hr>
             <table class="table table-responsive">
                 <thead>
@@ -27,7 +38,7 @@
                         <tr>
                             <td>{{ $dailySort->sort->description . ' - ' . $dailySort->timeSortFormat() }}</td>
                             <td>
-                                @if($dailySort->hasActive())
+                                @if($date->format('Y-m-d') === $now->format('Y-m-d') && $dailySort->hasActive())
                                     <span class="text-success bg-success">Activo</span>
                                 @else
                                     <span class="text-danger bg-danger">Cerrado</span>
@@ -35,7 +46,7 @@
                             </td>
                             <td>{{ number_format($dailySort->totalTickets(), 2, ',', '.') }}</td>
                             <td>
-                                @if($animal = $dailySort->getAnimalGain())
+                                @if($animal = $dailySort->getAnimalGainToDate($date))
                                     <img
                                             src="{{ asset('img/' . $dailySort->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
                                             alt="{{ $animal->name }}"
@@ -52,7 +63,7 @@
                                         data-toggle="modal"
                                         data-target="#animalsModal"
                                         onclick="updateFormAction('{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}')"
-                                        @if($dailySort->hasActive())
+                                        @if($date->format('Y-m-d') === $now->format('Y-m-d') && $dailySort->hasActive())
                                             disabled
                                         @endif
                                         >
@@ -106,11 +117,12 @@
 
                     <div class="text-center">
 
-                        <form action="" method="post" id="animalForm">
+                        <form action="{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}" method="post" id="animalForm">
                             {{ csrf_field() }}
                             {{ method_field('PUT') }}
 
                             <input type="hidden" id="animal_id" name="animal_id">
+                            <input type="hidden" name="date_sort" value="{{ $date->format('Y-m-d') }}">
 
                             <button class="btn btn-primary-color" id="btnSaveAnimal" disabled>
                                 <i class="fa fa-fw fa-save"></i> Guardar
