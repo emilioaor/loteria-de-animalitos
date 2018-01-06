@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-sm-8 col-md-6">
                     <div class="input-group">
-                        <input type="text" class="form-control" ng-model="search" placeholder="Buscar por ticket ID">
+                        <input type="text" id="inputSearch" class="form-control" ng-model="search" placeholder="Buscar por ticket ID" onkeydown="search(event)">
                     <span class="input-group-btn">
                         <a href="{{ route('user.list') }}?search=[[ search ]]" id="btnSearch" class="btn btn-default">
                             <i class="fa fa-fw fa-search"></i>
@@ -90,4 +90,19 @@
         </div>
     </div>
 
+@endsection
+
+@section('js')
+    <script>
+        function search(event)
+        {
+            if (event.keyCode === 13 && $('#inputSearch').val() !== '') {
+                location.href = $('#btnSearch').attr('href');
+            }
+        }
+
+        $(window).ready(function() {
+            $('#inputSearch').focus();
+        });
+    </script>
 @endsection
