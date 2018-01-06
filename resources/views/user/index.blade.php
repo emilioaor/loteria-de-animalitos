@@ -59,8 +59,12 @@
                             <td>
                                 @if($ticket->isGain() && $ticket->status === \App\Ticket::STATUS_ACTIVE)
                                     <p class="gain">Ganador</p>
-                                @else
-                                    {{ $ticket->status }}
+                                @elseif($ticket->status === \App\Ticket::STATUS_ACTIVE)
+                                    <span class="text-success bg-success">{{ $ticket->status }}</span>
+                                @elseif($ticket->status === \App\Ticket::STATUS_PAY)
+                                    <span class="text-info bg-info">{{ $ticket->status }}</span>
+                                @elseif($ticket->status === \App\Ticket::STATUS_NULL)
+                                    <span class="text-danger bg-danger">{{ $ticket->status }}</span>
                                 @endif
                             </td>
                             <td>{{ number_format($ticket->amount(), 2, ',', '.') }}</td>
