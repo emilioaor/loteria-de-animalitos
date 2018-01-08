@@ -1,9 +1,10 @@
 ----------------------------------
       LOTERIA DE ANIMALITOS
 ----------------------------------
-A.G 9192
+{{ env('APP_LOCAL_NAME') }}
 TICKET: {{ $ticket->public_id }}
 FECHA: {{ date_format($ticket->created_at, 'd-m-Y h:i a') }}
+TAQUILLA: {{ $ticket->user->name }}
 SORTEOS:
 @foreach($ticket->dailySorts()->orderBy('time_sort')->get() as $dailySort)
 {{ strtoupper($dailySort->sort->description . ' ' . $dailySort->timeSortFormat()) }}
