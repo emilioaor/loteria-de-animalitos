@@ -27,13 +27,21 @@ class IndexController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index() {
-        $sorts = DailySort::orderBy('time_sort')->get();
+        $sorts = Sort::all();
         $activeSorts = [];
 
-        // Filtro solo los sorteos activos
         foreach ($sorts as $sort) {
-            if ($sort->hasActive()) {
-                $activeSorts[] = $sort;
+            $dailySorts = $sort->dailySorts()->orderBy('time_sort')->get();
+
+            // Filtro solo los sorteos activos
+            foreach ($dailySorts as $ds) {
+                if ($ds->hasActive()) {
+                    if (! isset($activeSorts[$sort->id])) {
+                        $activeSorts[$sort->id] = [];
+                    }
+
+                    $activeSorts[$sort->id][] = $ds;
+                }
             }
         }
 

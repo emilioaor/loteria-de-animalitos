@@ -71,25 +71,29 @@
 
                     <form action="{{ route('user.create') }}" method="post" name="formAnimal" id="formAnimal">
 
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <label>
-                                    Sorteos
-                                    ({{ $sorts[0]->sort->description }})
-                                </label>
-                            </div>
-                            @foreach($sorts as $dailySort)
-                                <div class="col-sm-4">
-                                    <input
-                                            type="checkbox"
-                                            name="sorts[{{ $dailySort->id }}]"
-                                            ng-model="data.sorts[{{ $dailySort->id }}]"
-                                            ng-init="data.sorts[{{ $dailySort->id }}]=false"
-                                            ng-change="getTotal()">
-                                    {{ $dailySort->timeSortFormat() }}
+                        @foreach($sorts as $sort)
+                            @if(count($sort))
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <label>
+                                            Sorteos
+                                            ({{ $sort[0]->sort->description }})
+                                        </label>
+                                    </div>
+                                    @foreach($sort as $dailySort)
+                                        <div class="col-sm-4">
+                                            <input
+                                                    type="checkbox"
+                                                    name="sorts[{{ $dailySort->id }}]"
+                                                    ng-model="data.sorts[{{ $dailySort->id }}]"
+                                                    ng-init="data.sorts[{{ $dailySort->id }}]=false"
+                                                    ng-change="getTotal()">
+                                            {{ $dailySort->timeSortFormat() }}
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
-                        </div>
+                            @endif
+                        @endforeach
 
                         {{ csrf_field() }}
 
@@ -182,11 +186,14 @@
 
 @section('js')
     <script>
-        @if(isset($sorts[0]))
-            var imgUrl = '{{ 'img/' . $sorts[0]->sort->folder }}';
-        @else
-            var imgUrl = 'img/';
-        @endif
+        var imgUrl = 'img/';
+
+        @foreach($sorts as $sort)
+            @foreach($sort as $dailySort)
+                imgUrl = '{{ 'img/' . $dailySort->sort->folder }}';
+                @break(2)
+            @endforeach
+        @endforeach
 
         var data = {
             animalsList : {!! json_encode($animals) !!},
