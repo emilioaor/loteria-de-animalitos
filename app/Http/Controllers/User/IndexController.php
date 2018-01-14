@@ -161,6 +161,12 @@ class IndexController extends Controller
             return redirect()->route('user.show', ['ticket' => $ticketId]);
         }
 
+        if (! $ticket->allSortResult()) {
+            $this->sessionMessages('Se debe asignar resultado a todos los sorteos' ,'alert-danger');
+
+            return redirect()->route('user.show', ['ticket' => $ticketId]);
+        }
+
         $ticket->status = Ticket::STATUS_PAY;
         $ticket->save();
 

@@ -150,4 +150,23 @@ class Ticket extends Model
 
         return true;
     }
+
+    /**
+     * Indica si ya se configuro resultado a todos los sorteos
+     * asociados a este ticket
+     *
+     * @return bool
+     */
+    public function allSortResult()
+    {
+        foreach ($this->dailySorts as $dailySort) {
+            $result = $dailySort->getResultToDate($this->created_at);
+
+            if (! $result) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

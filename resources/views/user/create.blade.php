@@ -105,7 +105,7 @@
                                     <td width="10%">[[ $index + 1 ]]</td>
                                     <td width="30%">[[ animal.number + ' - ' + animal.name ]]</td>
                                     <td width="20%">
-                                        <span class="text-danger" ng-if="animal.limitError">
+                                        <span class="text-danger" ng-if="animal.limitError || true">
                                             <strong>Limite:</strong>
                                             [[ animal.limit ]]
                                         </span>
