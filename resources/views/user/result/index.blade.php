@@ -117,7 +117,7 @@
 
                     <div class="text-center">
 
-                        <form action="{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}" method="post" id="animalForm">
+                        <form action="" method="post" id="animalForm">
                             {{ csrf_field() }}
                             {{ method_field('PUT') }}
 

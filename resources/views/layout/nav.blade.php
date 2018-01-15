@@ -4,7 +4,7 @@
     <div class="navbar-header" style="width: 100%!important;">
         @if(Auth::check())
 
-            <a class="navbar-brand" href="{{ route('user.index') }}">Loteria de animalitos</a>
+            <a class="navbar-brand" href="{{ route('user.index') }}">Loteria de animalitos <small>({{ (new \DateTime('now'))->format('d-m-Y h:i a') }})</small> </a>
 
             <!-- Top Menu Items -->
 
