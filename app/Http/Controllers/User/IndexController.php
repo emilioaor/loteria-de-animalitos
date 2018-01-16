@@ -221,4 +221,24 @@ class IndexController extends Controller
 
         return $animals;
     }
+
+    /**
+     * Imprime un ticket
+     *
+     * @param $ticketId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function printTicket($ticketId)
+    {
+        $ticket = Ticket::find($ticketId);
+
+        $printSpooler = new PrintSpooler();
+        $printSpooler->ticket_id = $ticket->id;
+        $printSpooler->status = PrintSpooler::STATUS_PENDING;
+        $printSpooler->save();
+
+        $this->sessionMessages('Ticket a cola de impresion');
+
+        return redirect()->route('user.show', ['ticket' => $ticketId]);
+    }
 }

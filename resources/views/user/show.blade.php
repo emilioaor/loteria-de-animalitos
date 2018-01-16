@@ -78,6 +78,18 @@
                     </button>
                 </form>
             @endif
+
+                <form
+                        action="{{ route('user.printTicket', ['ticket' => $ticket->id]) }}"
+                        method="post"
+                        style="display: inline-block;"
+                        id="printForm">
+                    {{ csrf_field() }}
+
+                    <button type="button" class="btn btn-primary" onclick="printTicket();">
+                        <i class="fa fa-fw fa-print"></i> Imprimir ticket
+                    </button>
+                </form>
         </div>
     </div>
 
@@ -123,6 +135,11 @@
         function payTicket() {
             if (confirm('¿Pagar este ticket?')) {
                 $('#payForm').submit();
+            }
+        }
+        function printTicket() {
+            if (confirm('¿Imprimir este ticket?')) {
+                $('#printForm').submit();
             }
         }
     </script>
