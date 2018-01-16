@@ -12,4 +12,6 @@ FECHA: {{ date_format($ticket->created_at, 'd-m-Y h:i a') }}
 TOTAL                  {{ number_format($ticket->amount(), 2, ',', '.') }}
 
 VALIDO POR 3 DIAS
+
+
 ------------------------------
