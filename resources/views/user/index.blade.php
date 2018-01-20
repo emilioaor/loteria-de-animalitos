@@ -62,7 +62,11 @@
                                 @elseif($ticket->status === \App\Ticket::STATUS_ACTIVE)
                                     <span class="text-success bg-success">{{ $ticket->status }}</span>
                                 @elseif($ticket->status === \App\Ticket::STATUS_PAY)
-                                    <span class="text-info bg-info">{{ $ticket->status }}</span>
+                                    <span class="text-info bg-info">
+                                        <strong>
+                                            <i class="glyphicon glyphicon-check"></i> {{ $ticket->status }}
+                                        </strong>
+                                    </span>
                                 @elseif($ticket->status === \App\Ticket::STATUS_NULL)
                                     <span class="text-danger bg-danger">{{ $ticket->status }}</span>
                                 @endif
