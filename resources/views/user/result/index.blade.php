@@ -61,8 +61,7 @@
                                         type="button"
                                         class="btn btn-primary-color"
                                         data-toggle="modal"
-                                        data-target="#animalsModal"
-                                        onclick="updateFormAction('{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}')"
+                                        data-target="#animalsModal{{ $dailySort->id }}"
                                         @if($date->format('Y-m-d') === $now->format('Y-m-d') && $dailySort->hasActive())
                                             disabled
                                         @endif
@@ -81,71 +80,71 @@
 
 
     <!-- Modal -->
-    <div id="animalsModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+    @foreach($dailySorts as $dailySort)
+        <div id="animalsModal{{ $dailySort->id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Selecciona el animalito ganador <i class="glyphicon glyphicon-ok-sign"></i></h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row">
-
-                        @foreach($animals as $animal)
-                            <div class="col-xs-4 col-sm-3">
-                                <a
-                                        href=""
-                                        onclick="changeAnimalId({{ $animal->id  }});"
-                                        ng-click="selectedAnimal = {{ $animal->id }}">
-                                    <p>
-                                        <img
-                                                @if(isset($dailySorts[0]))
-                                                    src="{{ asset('img/' . $dailySorts[0]->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
-                                                @endif
-                                                alt="{{ $animal->name }}"
-                                                style="max-width: 38px">
-                                        {{ $animal->name }}
-                                        <i class="fa fa-check" ng-show="selectedAnimal == {{ $animal->id }}"></i>
-                                    </p>
-                                </a>
-                            </div>
-                        @endforeach
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">
+                            Ganador
+                            <small>({{ $dailySort->sort->description . ' ' . $dailySort->timeSortFormat() }})</small>
+                            <i class="glyphicon glyphicon-ok-sign"></i>
+                        </h4>
                     </div>
+                    <div class="modal-body">
 
-                    <div class="text-center">
+                        <div class="row">
 
-                        <form action="" method="post" id="animalForm">
-                            {{ csrf_field() }}
-                            {{ method_field('PUT') }}
+                            @foreach($dailySort->sort->animals as $animal)
+                                <div class="col-xs-4 col-sm-3">
+                                    <a
+                                            href=""
+                                            onclick="changeAnimalId('{{ $animal->id  }}', '{{ $dailySort->id }}');"
+                                            ng-click="selectedAnimal = {{ $animal->id }}">
+                                        <p>
+                                            <img
+                                                    src="{{ asset('img/' . $dailySort->sort->folder . '/' . $animal->getClearName() . '.jpg') }}"
+                                                    alt="{{ $animal->name }}"
+                                                    style="max-width: 38px">
+                                            {{ $animal->name }}
+                                            <i class="fa fa-check" ng-show="selectedAnimal == {{ $animal->id }}"></i>
+                                        </p>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
 
-                            <input type="hidden" id="animal_id" name="animal_id">
-                            <input type="hidden" name="date_sort" value="{{ $date->format('Y-m-d') }}">
+                        <div class="text-center">
 
-                            <button class="btn btn-primary-color" id="btnSaveAnimal" disabled>
-                                <i class="fa fa-fw fa-save"></i> Guardar
-                            </button>
-                        </form>
+                            <form action="{{ route('results.animalGain', ['dailySort' => $dailySort->id]) }}" method="post" id="animalForm{{ $dailySort->id }}">
+                                {{ csrf_field() }}
+                                {{ method_field('PUT') }}
+
+                                <input type="hidden" id="animal_id{{ $dailySort->id }}" name="animal_id">
+                                <input type="hidden" name="date_sort" value="{{ $date->format('Y-m-d') }}">
+
+                                <button class="btn btn-primary-color" id="btnSaveAnimal{{ $dailySort->id }}" disabled>
+                                    <i class="fa fa-fw fa-save"></i> Guardar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
+
             </div>
-
         </div>
-    </div>
+    @endforeach
 
 @endsection
 
 @section('js')
     <script>
-        function updateFormAction(url) {
-            $('#animalForm').attr('action', url);
-        }
-
-        function changeAnimalId(animalId) {
-            $('#animal_id').val(animalId);
-            $('#btnSaveAnimal').removeAttr('disabled');
+        function changeAnimalId(animalId, id) {
+            $('#animal_id' + id).val(animalId);
+            $('#btnSaveAnimal' + id).removeAttr('disabled');
         }
     </script>
 @endsection

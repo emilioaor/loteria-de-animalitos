@@ -90,7 +90,7 @@ class Ticket extends Model
             }
 
             foreach ($this->animals as $animal) {
-                if ($animal->id === $result->animal->id) {
+                if ($animal->number === $result->animal->number) {
                     return true;
                 }
             }
@@ -116,7 +116,7 @@ class Ticket extends Model
             $animalGain = $result->animal;
             $amount = 0;
             foreach ($this->animals as $animal) {
-                if ($animal->id === $animalGain->id) {
+                if ($animal->number === $animalGain->number) {
                     $amount = $animal->pivot->amount;
                     $div = $amount /100;
                     $amount = $div * $this->pay_per_100;

@@ -15,8 +15,8 @@ class CreateTableAnimals extends Migration
     {
         Schema::create('animals', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 15)->unique();
-            $table->string('number', 3)->unique();
+            $table->string('name', 15);
+            $table->string('number', 3);
             $table->integer('sort_id')->unsigned();
             $table->foreign('sort_id')->references('id')->on('sorts');
             $table->timestamps();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Animal;
 use App\DailySort;
 use App\Result;
 use Illuminate\Http\Request;
@@ -19,7 +18,6 @@ class ResultController extends Controller
      */
     public function index(Request $request) {
         $dailySorts = DailySort::orderBy('sort_id')->orderBy('time_sort')->get();
-        $animals = Animal::all();
         $now = new \DateTime();
 
         if (! $request->has('date')) {
@@ -35,7 +33,6 @@ class ResultController extends Controller
 
         return view('user.result.index')->with([
             'dailySorts' => $dailySorts,
-            'animals' => $animals,
             'date' => $date,
             'now' => $now,
         ]);
