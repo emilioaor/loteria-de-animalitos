@@ -46,7 +46,7 @@ class IndexController extends Controller
             }
         }
 
-        $animals = Animal::all();
+        $animals = $sorts[0]->animals;
         $animals = $this->getDailyLimit($animals);
 
         return view('user.create')->with([

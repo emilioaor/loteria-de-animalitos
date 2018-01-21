@@ -64,11 +64,43 @@ angular.module('AnimalModule').controller('AnimalController', [
         };
         
         $scope.printIfHasList = function () {
+
+            if ($scope.newAnimal.number !== '' && ! parseInt($scope.newAnimal.number)) {
+                var animal = $scope.findByName(
+                    $scope.newAnimal.number ? $scope.newAnimal.number : ''
+                );
+
+                if (animal) {
+                    $scope.newAnimal.number = animal.number;
+                }
+            }
+
             if ($scope.hasList($scope.newAnimal.number)) {
                 return $scope.getListAnimal($scope.newAnimal.number).name;
             }
 
             return '-';
+        };
+        
+        $scope.findByName = function (name) {
+            var searchName = $scope.clearName(name);
+            var animalName;
+            var match = null;
+
+            for (let animal in $scope.data.animalsList) {
+                animalName = $scope.clearName($scope.data.animalsList[animal].name);
+
+                if (animalName.indexOf(searchName) === 0) {
+
+                    if (match && match.name !== animalName) {
+                        return null;
+                    }
+
+                    match = $scope.data.animalsList[animal];
+                }
+            }
+
+            return match;
         };
 
         $scope.keyToGoAmount = function (evt) {

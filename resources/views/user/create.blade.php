@@ -40,7 +40,6 @@
                                         type="text"
                                         class="form-control"
                                         placeholder="Animalito"
-                                        max="36"
                                         id="newAnimalNumber"
                                         ng-model="newAnimal.number"
                                         ng-style="styleAnimalAdd"
