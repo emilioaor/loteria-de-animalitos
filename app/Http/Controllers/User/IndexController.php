@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Animal;
 use App\DailySort;
 use App\PrintSpooler;
+use App\Result;
 use App\Sort;
 use App\Ticket;
 use App\User;
@@ -200,19 +200,44 @@ class IndexController extends Controller
      */
     private function getDailyLimit($animals)
     {
+        // Obtengo todos los tickets de hoy
         $start = (new \DateTime())->setTime(0, 0, 0);
         $end = (new \DateTime())->setTime(23, 59, 59);
-        // Obtengo todos los tickets de hoy
         $tickets = Ticket::where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
 
+        // Obtengo los resultados de la ultima semana
+        $startResult = clone $start;
+        $startResult->modify('-7 days');
+        $endResult = clone $end;
+
+        $results = Result::where('created_at', '>=', $startResult)->where('created_at', '<=', $endResult)->get();
+
+        // Recorro todos los animalitos
         foreach ($animals as $animal) {
-            if (! isset($animal->limit)) {
-                $animal->limit = floatval($animal->sort->daily_limit);
+            $resultFlag = false;
+
+            // Recorro todos los resultados para saber si ya ha salido este animal
+            foreach ($results as $result) {
+                if ($result->animal->number === $animal->number) {
+                    $resultFlag = true;
+                }
             }
 
+            // Verifico que no este definido el limite para inicializarlo
+            if (! isset($animal->limit)) {
+                if ($resultFlag) {
+                    // Si el animalito ya salio esta semana, le inicializo el limite del sorteo
+                    $animal->limit = floatval($animal->sort->daily_limit);
+                } else {
+                    // Si no ha salido esta semana, le inicializo un limite mas bajo
+                    $animal->limit = 1000;
+                }
+            }
+
+            // Al limite inicializado le descuento todas las ventas de hoy
             foreach ($tickets as $ticket) {
                 foreach ($ticket->animals as $ticketAnimal) {
-                    if ($ticketAnimal->id === $animal->id) {
+                    if ($ticketAnimal->number === $animal->number) {
                         $animal->limit -= $ticketAnimal->pivot->amount * count($ticket->dailySorts);
                     }
                 }
