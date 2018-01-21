@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Maneja las rutas principales de la taquilla
@@ -240,5 +241,30 @@ class IndexController extends Controller
         $this->sessionMessages('Ticket a cola de impresion');
 
         return redirect()->route('user.show', ['ticket' => $ticketId]);
+    }
+
+    /**
+     * Retorna un json de los ultimos tickets registrados
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getLastTickets(Request $request)
+    {
+        $data = [];
+        $tickets = Ticket::orderByDesc('id')->limit(10);
+
+        if (! empty($request->search)) {
+            $search = $request->search;
+            $search = '%' . str_replace(' ', '%', $search) . '%';
+            $tickets->where('public_id', 'LIKE', $search);
+        }
+
+        foreach ($tickets->get() as $ticket) {
+            $ticket->animals = $ticket->animals;
+            $data[] = $ticket;
+        }
+
+        return new JsonResponse($data);
     }
 }

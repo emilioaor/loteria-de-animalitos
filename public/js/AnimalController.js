@@ -1,6 +1,7 @@
 angular.module('AnimalModule').controller('AnimalController', [
     '$scope',
-    function($scope) {
+    '$http',
+    function($scope, $http) {
 
         $scope.addToTicket = (animal) => {
             animal.amount = 0;
@@ -161,10 +162,42 @@ angular.module('AnimalModule').controller('AnimalController', [
             return false;
         };
 
+        $scope.searchRepeatTicket = function(url) {
+            $scope.repeatLoading = true;
+            url = url + '?search=' + $scope.filterTicket;
+
+            $http.get(url).then(function(promise) {
+                $scope.repeatTickets = promise.data;
+                $scope.repeatLoading = false;
+            }, function (err) {
+                $scope.repeatTickets = [];
+                $scope.repeatLoading = false;
+            });
+        };
+        
+        $scope.getAnimalsRepeat = function (ticket) {
+            $scope.data.animalsTicket = [];
+            for (var i in ticket.animals) {
+
+                for (var x in $scope.data.animalsList) {
+                    if ($scope.data.animalsList[x].id === ticket.animals[i].id) {
+                        ticket.animals[i].limit = $scope.data.animalsList[x].limit;
+                    }
+                }
+
+                ticket.animals[i].amount = ticket.animals[i].pivot.amount;
+                $scope.data.animalsTicket.push(ticket.animals[i]);
+            }
+            $('#closeModalRepeat').click();
+        };
+
         $scope.data = data;
         $scope.data.animalsTicket = [];
         $scope.newAnimal = {};
         $scope.styleAnimalAdd = {};
         $scope.total = 0;
+        $scope.repeatLoading = false;
+        $scope.repeatTickets = [];
+        $scope.filterTicket = '';
     }])
 ;

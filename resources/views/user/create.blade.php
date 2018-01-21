@@ -66,6 +66,14 @@
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </td>
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                        data-toggle="modal"
+                                        data-target="#repeatModal"
+                                        ng-click="searchRepeatTicket('{{ route('user.lastTickets') }}')">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </td>
                         </tr>
                     </table>
 
@@ -173,6 +181,74 @@
                 </div>
 
             </div>
+
+            <!-- Modal ticket repeat -->
+            <div id="repeatModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button id="closeModalRepeat" type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Repetir ticket</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input
+                                            type="text"
+                                            class="form-control"
+                                            ng-change="searchRepeatTicket('{{ route('user.lastTickets') }}')"
+                                            ng-model="filterTicket"
+                                            placeholder="Numero del ticket">
+                                    <hr>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+
+                                    <table ng-if="true" class="table table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Ticket</th>
+                                                <th class="text-center">Estatus</th>
+                                                <th class="text-center">Creado</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                            <tr  ng-show="repeatLoading">
+                                                <th colspan="4" class="text-center">
+                                                    <img src="{{ asset('img/loading.gif') }}" alt="Cargando..">
+                                                </th>
+                                            </tr>
+                                            <tr  ng-show="! repeatLoading && repeatTickets.length === 0">
+                                                <th colspan="4" class="text-center">
+                                                    Sin resultados
+                                                </th>
+                                            </tr>
+                                            <tr ng-repeat="ticket in repeatTickets"  ng-show="! repeatLoading">
+                                                <td>[[ ticket.public_id ]]</td>
+                                                <td>[[ ticket.status ]]</td>
+                                                <td>[[ ticket.created_at ]]</td>
+                                                <td>
+                                                    <button class="btn btn-primary-color" ng-click="getAnimalsRepeat(ticket)">
+                                                        <i class="glyphicon glyphicon-check"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /Modal ticket repeat -->
 
         </div>
     @else
