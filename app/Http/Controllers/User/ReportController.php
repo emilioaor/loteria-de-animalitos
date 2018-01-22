@@ -35,6 +35,7 @@ class ReportController extends Controller
             return redirect()->route('user.report');
         }
 
+        set_time_limit(0);
         $dateStart = new \DateTime($request->date_start);
         $dateEnd = new \DateTime($request->date_end);
 
