@@ -154,8 +154,8 @@ class IndexController extends Controller
         return view('user.index')->with([
             'tickets' => $tickets->paginate(20)->setPath(
                 route('user.list', [
-                    'search' => $request->search ?? null,
-                    'status' => $request->status ?? null,
+                    'search' => isset($request->search) ? $request->search : null,
+                    'status' => isset($request->status) ? $request->status : null,
                 ])
             ),
         ]);
