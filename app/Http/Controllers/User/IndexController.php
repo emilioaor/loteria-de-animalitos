@@ -132,7 +132,33 @@ class IndexController extends Controller
             $tickets->where('public_id', 'LIKE', $search);
         }
 
-        return view('user.index')->with(['tickets' => $tickets->paginate(20)]);
+        if (! empty($request->status)) {
+            if ($request->status !== Ticket::STATUS_GAIN) {
+                $tickets->where('status', $request->status);
+            } else {
+                $tickets->where('status', Ticket::STATUS_ACTIVE);
+            }
+        }
+
+        if ($request->status === Ticket::STATUS_GAIN) {
+
+            // Limpio los tickets activo, para solo dejar los ganadores
+            foreach ($tickets->get() as $ticket) {
+                if (! $ticket->isGain()) {
+                    $tickets->where('id', '<>', $ticket->id);
+                }
+            }
+
+        }
+
+        return view('user.index')->with([
+            'tickets' => $tickets->paginate(20)->setPath(
+                route('user.list', [
+                    'search' => $request->search ?? null,
+                    'status' => $request->status ?? null,
+                ])
+            ),
+        ]);
     }
 
     /**

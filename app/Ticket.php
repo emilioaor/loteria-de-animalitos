@@ -9,6 +9,7 @@ class Ticket extends Model
     const STATUS_ACTIVE = 'Activo';
     const STATUS_PAY = 'Pago';
     const STATUS_NULL = 'Anulado';
+    const STATUS_GAIN = 'Ganador';
 
     protected $table = 'tickets';
 

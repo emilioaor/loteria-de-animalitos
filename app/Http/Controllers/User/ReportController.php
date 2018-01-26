@@ -31,7 +31,7 @@ class ReportController extends Controller
     public function generateDailyReport(Request $request) {
 
         if (empty($request->date_start) || empty($request->date_end)) {
-            $this->sessionMessage('Debe especificar fecha de inicio y fin', 'alert-danger');
+            $this->sessionMessages('Debe especificar fecha de inicio y fin', 'alert-danger');
             return redirect()->route('user.report');
         }
 

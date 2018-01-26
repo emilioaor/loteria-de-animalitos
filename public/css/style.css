@@ -129,3 +129,7 @@
 .section-animals__item p strong{
     font-size: 18px;
 }
+.filter {
+    list-style: none;
+    padding: 0;
+}

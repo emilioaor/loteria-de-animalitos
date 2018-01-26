@@ -16,7 +16,7 @@
                     <div class="input-group">
                         <input type="text" id="inputSearch" class="form-control" ng-model="search" placeholder="Buscar por ticket ID" onkeydown="search(event)">
                     <span class="input-group-btn">
-                        <a href="{{ route('user.list') }}?search=[[ search ]]" id="btnSearch" class="btn btn-default">
+                        <a href="{{ route('user.list', ['status' => Request::has('status') ? Request::get('status') : null]) }}&search=[[ search ]]" id="btnSearch" class="btn btn-default">
                             <i class="fa fa-fw fa-search"></i>
                         </a>
                     </span>
@@ -27,11 +27,22 @@
                 <div class="col-xs-12">
                     @if(Request::has('search'))
                         <br>
-                        <a href="{{ route('user.list') }}" class="text-danger">
+                        <a href="{{ route('user.list', ['status' => Request::has('status') ? Request::get('status') : null]) }}" class="text-danger">
                             <i class="fa fa-remove"></i>
                         </a>
                         <small>
                             <strong>Filtrado por:</strong> {{ Request::get('search') }}
+
+                        </small>
+
+                    @endif
+                    @if(Request::has('status'))
+                        <br>
+                        <a href="{{ route('user.list', ['search' => Request::has('search') ? Request::get('search') : null]) }}" class="text-danger">
+                            <i class="fa fa-remove"></i>
+                        </a>
+                        <small>
+                            <strong>Filtrado por:</strong> {{ Request::get('status') }}
 
                         </small>
 
@@ -45,7 +56,35 @@
                         <th width="15%">Ticket ID</th>
                         <th width="25%">Fecha de registro</th>
                         <th width="25%">Taquilla</th>
-                        <th width="20%">Estatus</th>
+                        <th width="20%">
+                            <ul class="filter">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Estatus <i class="fa fa-filter"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ route('user.list', ['status' => \App\Ticket::STATUS_GAIN, 'search' => Request::has('search') ? Request::get('search') : null]) }}">
+                                                {{ \App\Ticket::STATUS_GAIN }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.list', ['status' => \App\Ticket::STATUS_ACTIVE, 'search' => Request::has('search') ? Request::get('search') : null]) }}">
+                                                {{ \App\Ticket::STATUS_ACTIVE }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.list', ['status' => \App\Ticket::STATUS_PAY, 'search' => Request::has('search') ? Request::get('search') : null]) }}">
+                                                {{ \App\Ticket::STATUS_PAY }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.list', ['status' => \App\Ticket::STATUS_NULL, 'search' => Request::has('search') ? Request::get('search') : null]) }}">
+                                                {{ \App\Ticket::STATUS_NULL }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </th>
                         <th width="15%">Monto</th>
                         <th></th>
                     </tr>
