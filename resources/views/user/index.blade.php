@@ -96,7 +96,7 @@
                             <td>{{ date_format($ticket->created_at, 'd-m-Y h:i a') }}</td>
                             <td>{{ $ticket->user->name }}</td>
                             <td>
-                                @if($ticket->isGain() && $ticket->status === \App\Ticket::STATUS_ACTIVE)
+                                @if($ticket->isGain())
                                     <p class="gain">Ganador</p>
                                 @elseif($ticket->status === \App\Ticket::STATUS_ACTIVE)
                                     <span class="text-success bg-success">{{ $ticket->status }}</span>

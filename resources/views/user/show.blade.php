@@ -49,7 +49,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            @if($ticket->isGain() && $ticket->status === \App\Ticket::STATUS_ACTIVE)
+            @if($ticket->isGain())
                 <form
                         action="{{ route('user.payTicket', ['ticket' => $ticket->id]) }}"
                         method="post"
@@ -117,7 +117,7 @@
     <div class="row">
         <div class="col-xs-12">
             <h3>Total: {{ number_format($ticket->amount(), 2, ',', '.') }}</h3>
-            @if($ticket->isGain() && $ticket->status !== \App\Ticket::STATUS_NULL)
+            @if($ticket->isGain() || $ticket->isPay())
                 <h3>Pagar al ganador: {{ number_format($ticket->payToGain(), 2, ',', '.') }}</h3>
             @endif
         </div>

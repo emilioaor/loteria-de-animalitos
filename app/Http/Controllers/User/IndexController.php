@@ -133,22 +133,7 @@ class IndexController extends Controller
         }
 
         if (! empty($request->status)) {
-            if ($request->status !== Ticket::STATUS_GAIN) {
-                $tickets->where('status', $request->status);
-            } else {
-                $tickets->where('status', Ticket::STATUS_ACTIVE);
-            }
-        }
-
-        if ($request->status === Ticket::STATUS_GAIN) {
-
-            // Limpio los tickets activo, para solo dejar los ganadores
-            foreach ($tickets->get() as $ticket) {
-                if (! $ticket->isGain()) {
-                    $tickets->where('id', '<>', $ticket->id);
-                }
-            }
-
+            $tickets->where('status', $request->status);
         }
 
         return view('user.index')->with([
@@ -303,7 +288,7 @@ class IndexController extends Controller
     public function getLastTickets(Request $request)
     {
         $data = [];
-        $tickets = Ticket::orderByDesc('id')->limit(10);
+        $tickets = Ticket::orderByDesc('id')->with('animals')->limit(10);
 
         if (! empty($request->search)) {
             $search = $request->search;
@@ -312,7 +297,6 @@ class IndexController extends Controller
         }
 
         foreach ($tickets->get() as $ticket) {
-            $ticket->animals = $ticket->animals;
             $data[] = $ticket;
         }
 

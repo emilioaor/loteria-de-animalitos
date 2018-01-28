@@ -27,9 +27,11 @@
                 <thead>
                     <tr>
                         <th width="25%">Sorteo</th>
-                        <th width="25%">Estatus del sorteo</th>
-                        <th width="25%">Total jugado</th>
-                        <th width="25%">Ganador</th>
+                        <th width="15%">Estatus</th>
+                        <th width="15%">Total jugado</th>
+                        <th width="20%">Ganador</th>
+                        <th width="10%" class="text-center">Ganadores</th>
+                        <th width="15%" class="text-center">P. de pago</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -44,7 +46,7 @@
                                     <span class="text-danger bg-danger">Cerrado</span>
                                 @endif
                             </td>
-                            <td>{{ number_format($dailySort->totalTickets(), 2, ',', '.') }}</td>
+                            <td>{{ number_format($dailySort->totalTicketsToDate($date), 2, ',', '.') }}</td>
                             <td>
                                 @if($animal = $dailySort->getAnimalGainToDate($date))
                                     <img
@@ -56,6 +58,8 @@
                                     -
                                 @endif
                             </td>
+                            <td class="text-center">{{ $dailySort->countTicketsGainToDate($date) }}</td>
+                            <td class="text-center">{{ $dailySort->countTicketsPendingToDate($date) }}</td>
                             <td>
                                 <button
                                         type="button"

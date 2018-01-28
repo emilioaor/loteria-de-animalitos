@@ -82,6 +82,26 @@ class Ticket extends Model
      * @return bool
      */
     public function isGain() {
+        return $this->status === self::STATUS_GAIN;
+    }
+
+    /**
+     * Indica si un ticket esta pago
+     *
+     * @return bool
+     */
+    public function isPay() {
+        return $this->status === self::STATUS_PAY;
+    }
+
+    /**
+     * Evalua si un ticket es ganador. Este codigo se debe usar cuando se
+     * esta estableciendo el resultado, en cualquier otro caso probablemente
+     * deba usar isGain() ya que no es necesario hacer esta consulta
+     *
+     * @return bool
+     */
+    public function ticketIsGain() {
         foreach ($this->dailySorts as $dailySort) {
 
             $result = $dailySort->getResultToDate($this->created_at);

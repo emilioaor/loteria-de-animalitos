@@ -42,20 +42,34 @@ class DailySort extends Model
     }
 
     /**
-     * Retorna el total jugado en todos los tickets
-     * asociados a este sorteo
+     * Busca todos los tickets asociados al sorteo para una fecha
+     * especifica
      *
-     * @return int
+     * @param \DateTime $date
+     * @return mixed
      */
-    public function totalTickets() {
-        $total = 0;
-        $start = (new \DateTime())->setTime(0, 0, 0);
-        $end = (new \DateTime())->setTime(23, 59, 59);
+    public function getTicketsToDate(\DateTime $date)
+    {
+        $start = $date->setTime(0, 0, 0);
+        $end = clone $start;
+        $end = $end->setTime(23, 59, 59);
 
-        $tickets = $this->tickets()
+        return $this->tickets()
             ->where('created_at', '>=', $start)
             ->where('created_at', '<=', $end)
             ->get();
+    }
+
+    /**
+     * Retorna el total jugado en todos los tickets
+     * asociados a este sorteo para la fecha especificada
+     *
+     * @param \DateTime $date
+     * @return int
+     */
+    public function totalTicketsToDate(\DateTime $date) {
+        $total = 0;
+        $tickets = $this->getTicketsToDate($date);
 
         foreach ($tickets as $ticket) {
             $total += ($ticket->amount() / count($ticket->dailySorts));
@@ -64,6 +78,43 @@ class DailySort extends Model
         return $total;
     }
 
+    /**
+     * Cuenta los tickets ganadores para una fecha especifica
+     *
+     * @param \DateTime $date
+     * @return int
+     */
+    public function countTicketsGainToDate(\DateTime $date) {
+        $total = 0;
+        $tickets = $this->getTicketsToDate($date);
+
+        foreach ($tickets as $ticket) {
+            if ($ticket->isGain() || $ticket->isPay()) {
+                $total++;
+            }
+        }
+
+        return $total;
+    }
+
+    /**
+     * Cuenta los tickets ganadores que aun estan pendientes de pago
+     *
+     * @param \DateTime $date
+     * @return int
+     */
+    public function countTicketsPendingToDate(\DateTime $date) {
+        $total = 0;
+        $tickets = $this->getTicketsToDate($date);
+
+        foreach ($tickets as $ticket) {
+            if ($ticket->isGain()) {
+                $total++;
+            }
+        }
+
+        return $total;
+    }
 
     /**
      * Indica si el sorteo esta activo
