@@ -133,3 +133,6 @@
     list-style: none;
     padding: 0;
 }
+.section-animals .form-group {
+    float: left;
+}

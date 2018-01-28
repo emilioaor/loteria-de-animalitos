@@ -82,10 +82,15 @@
                             @if(count($sort))
                                 <div class="form-group">
                                     <div class="col-xs-12">
-                                        <label>
-                                            Cierre aproximado:
-                                            [[ seconds ]] segundos
-                                        </label>
+                                        <p>
+                                            <strong>Cierre aproximado:</strong>
+                                            <span ng-class="{
+                                                'bg-danger' : (hours === 0 && minutes === 0 && seconds === 0),
+                                                'text-danger' : (hours === 0 && minutes === 0 && seconds === 0)
+                                            }">
+                                                [[ hours >= 10 ? hours : '0' + hours ]]:[[ minutes >= 10 ? minutes : '0' + minutes ]]:[[ seconds >= 10 ? seconds : '0' + seconds ]]
+                                            </span>
+                                        </p>
                                     </div>
                                     <div class="col-xs-12">
                                         <label>
@@ -99,8 +104,17 @@
                                                     type="checkbox"
                                                     name="sorts[{{ $dailySort->id }}]"
                                                     ng-model="data.sorts[{{ $dailySort->id }}]"
-                                                    ng-init="data.sorts[{{ $dailySort->id }}]=false"
-                                                    ng-change="getTotal()">
+                                                    data-sort-id="{{ $dailySort->id }}"
+                                                    @if($dailySort->id === $sort[0]->id)
+                                                        ng-init="data.sorts[{{ $dailySort->id }}]=true"
+                                                        id="nextSortCheck"
+                                                    @else
+                                                        ng-init="data.sorts[{{ $dailySort->id }}]=false"
+                                                    @endif
+                                                    ng-change="getTotal()"
+                                                    onkeydown="return (event.keyCode !== 13)"
+                                                    onkeypress="return (event.keyCode !== 13)"
+                                                    onkeyup="return (event.keyCode !== 13)">
                                             {{ $dailySort->timeSortFormat() }}
                                         </div>
                                     @endforeach
@@ -110,12 +124,32 @@
 
                         {{ csrf_field() }}
 
-                                <!-- Animalitos jugados -->
+                        <div class="row" ng-if="data.animalsTicket.length">
+                            <div class="col-xs-6">
+                                <p>
+                                    <strong>Cantidad:</strong>
+                                    [[ data.animalsTicket.length ]]
+                                </p>
+                            </div>
+                            <div class="col-xs-6">
+                                <p>
+                                    <strong>Total:</strong>
+                                    [[ total ]] Bsf
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Animalitos jugados -->
                         <div id="spaceAnimalTicket" style="overflow: auto; width: 100%; margin-bottom: 10px;">
                             <table class="table">
                                 <tbody>
-                                <tr ng-repeat="animal in data.animalsTicket">
-                                    <td width="10%">[[ $index + 1 ]]</td>
+                                <tr ng-repeat="animal in data.animalsTicket" ng-class="{'bg-danger' : animal.limitError}">
+                                    <td width="10%">
+                                        <img
+                                                class="img-responsive"
+                                                ng-src="[[ data.imgUrl + '/' + clearName(animal.name) + '.jpg' ]]"
+                                                alt="[[ animal.name ]]">
+                                    </td>
                                     <td width="30%">[[ animal.number + ' - ' + animal.name ]]</td>
                                     <td width="20%">
                                         <span class="text-danger" ng-if="animal.limitError || true">
@@ -140,6 +174,9 @@
                                                 name="amounts[]"
                                                 ng-change="getTotal()"
                                                 required
+                                                onkeydown="return (event.keyCode !== 13)"
+                                                onkeypress="return (event.keyCode !== 13)"
+                                                onkeyup="return (event.keyCode !== 13)"
                                                 >
                                     <span
                                             class="error"
@@ -157,19 +194,6 @@
                                     </td>
                                 </tr>
                                 </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <span ng-if="data.animalsTicket.length">
-                                            [[ total ]] Bsf
-                                        </span>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                </tfoot>
                             </table>
                         </div>
 

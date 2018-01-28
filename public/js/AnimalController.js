@@ -27,6 +27,16 @@ angular.module('AnimalModule').controller('AnimalController', [
             return false;
         };
 
+        $scope.getAnimalTicket = (id) => {
+            for (let animal in $scope.data.animalsTicket) {
+                if ($scope.data.animalsTicket[animal].id == id) {
+                    return $scope.data.animalsTicket[animal];
+                }
+            }
+
+            return null;
+        };
+
         $scope.hasList = (number) => {
             for (let animal in $scope.data.animalsList) {
                 if ($scope.data.animalsList[animal].number == number) {
@@ -124,6 +134,9 @@ angular.module('AnimalModule').controller('AnimalController', [
                         required : false
                     };
                     $scope.data.animalsTicket.push(animal);
+                } else {
+                    // Si ya existe le acumulo el monto
+                    $scope.getAnimalTicket(animal.id).amount += $scope.newAnimal.amount;
                 }
                 $scope.newAnimal = {};
                 $('#newAnimalNumber').focus();
@@ -205,7 +218,7 @@ angular.module('AnimalModule').controller('AnimalController', [
                 $scope.repeatLoading = false;
             });
         };
-        
+
         $scope.getAnimalsRepeat = function (ticket) {
             $scope.data.animalsTicket = [];
             for (var i in ticket.animals) {
@@ -220,12 +233,36 @@ angular.module('AnimalModule').controller('AnimalController', [
                 $scope.data.animalsTicket.push(ticket.animals[i]);
             }
             $('#closeModalRepeat').click();
+            $scope.getTotal();
         };
 
+        var interval = 1000;
         window.setInterval(function() {
-            $scope.seconds--;
-            $scope.$apply();
-        }, 1000);
+            if ($scope.hours > 0 || $scope.minutes > 0 || $scope.seconds > 0) {
+                if ($scope.seconds === 0) {
+
+                    if ($scope.minutes === 0) {
+                        $scope.minutes = 60;
+                        $scope.hours--;
+                    }
+
+                    $scope.seconds = 60;
+                    $scope.minutes--;
+                }
+
+                $scope.seconds--;
+                $scope.$apply();
+            } else {
+                // Llego el contador a 0
+                var check = $('#nextSortCheck');
+
+                check.attr('disabled', 'disabled');
+                $scope.data.sorts[check.data('sort-id')] = false;
+                $scope.$apply();
+
+                interval = 0;
+            }
+        }, interval);
 
         $scope.data = data;
         $scope.data.animalsTicket = [];
@@ -236,5 +273,15 @@ angular.module('AnimalModule').controller('AnimalController', [
         $scope.repeatTickets = [];
         $scope.filterTicket = '';
         $scope.seconds = seconds;
+        $scope.minutes = 0;
+        $scope.hours = 0;
+        while ($scope.seconds >= 60) {
+            $scope.seconds -= 60;
+            $scope.minutes++;
+        }
+        while ($scope.minutes >= 60) {
+            $scope.minutes -= 60;
+            $scope.hours++;
+        }
     }])
 ;
