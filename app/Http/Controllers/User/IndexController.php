@@ -30,6 +30,8 @@ class IndexController extends Controller
     public function index() {
         $sorts = Sort::all();
         $activeSorts = [];
+        $seconds = 0;
+        $now = new \DateTime();
 
         foreach ($sorts as $sort) {
             $dailySorts = $sort->dailySorts()->orderBy('time_sort')->get();
@@ -42,6 +44,12 @@ class IndexController extends Controller
                     }
 
                     $activeSorts[$sort->id][] = $ds;
+
+                    if ($seconds === 0) {
+                        // Guardo los segundos restantes para el primer sorteo
+                        $tenMinuteLess = $ds->getTimeSort()->modify('-10 minutes');
+                        $seconds = ($now->diff($tenMinuteLess)->h * 3600) + ($now->diff($tenMinuteLess)->i * 60) + ($now->diff($tenMinuteLess)->s);
+                    }
                 }
             }
         }
@@ -52,7 +60,7 @@ class IndexController extends Controller
         return view('user.create')->with([
             'sorts' => $activeSorts,
             'animals' => $animals,
-
+            'seconds' => $seconds,
         ]);
     }
 

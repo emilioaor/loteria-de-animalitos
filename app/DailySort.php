@@ -207,6 +207,16 @@ class DailySort extends Model
     }
 
     /**
+     * Retorna el time_sort en \DateTime
+     *
+     * @return \DateTime
+     */
+    public function getTimeSort()
+    {
+        return \DateTime::createFromFormat('H:i:s', $this->time_sort);
+    }
+
+    /**
      * Retorna la hora del sorteo en formato hora:minuto am/pm
      *
      * @return string

@@ -13,7 +13,7 @@
                     <!-- Lista de animalitos -->
                     <div class="col-sm-6 col-md-4 section-animals__item" ng-repeat="animal in data.animalsList">
                         <p class="text-center" ng-hide="hasTicket(animal.id);">
-                            <a href="" ng-click="addToTicket(animal);" onclick="moveScroll = true">
+                            <a href="" ng-click="addToTicket(animal);">
                                 <img ng-src="[[ data.imgUrl + '/' + clearName(animal.name) + '.jpg' ]]" alt="[[ animal.name ]]">
                                 <strong>[[ animal.number ]]</strong>
                                 [[ animal.name ]]
@@ -61,7 +61,7 @@
                                         >
                             </td>
                             <td>
-                                <button type="button" class="btn btn-success" ng-click="addNewAnimal()" onclick="moveScroll = true">
+                                <button type="button" class="btn btn-success" ng-click="addNewAnimal()">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </td>
@@ -81,6 +81,12 @@
                         @foreach($sorts as $sort)
                             @if(count($sort))
                                 <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <label>
+                                            Cierre aproximado:
+                                            [[ seconds ]] segundos
+                                        </label>
+                                    </div>
                                     <div class="col-xs-12">
                                         <label>
                                             Sorteos
@@ -262,6 +268,7 @@
 @section('js')
     <script>
         var imgUrl = 'img/';
+        var seconds = {{ $seconds }}
 
         @foreach($sorts as $sort)
             @foreach($sort as $dailySort)
@@ -275,19 +282,8 @@
             imgUrl : imgUrl,
         };
 
-        var moveScroll = false;
-
         $('#newAnimalNumber').focus();
 
-        $(window).ready(function () {
-
-            window.setInterval(function() {
-                if (moveScroll) {
-                    $('#spaceAnimalTicket').scrollTop(99999);
-                    moveScroll = false;
-                }
-            }, 500)
-        });
     </script>
 @endsection
 

@@ -116,7 +116,6 @@ angular.module('AnimalModule').controller('AnimalController', [
         };
 
         $scope.addNewAnimal = function () {
-            moveScroll = true;
             if ($scope.hasList($scope.newAnimal.number) && $scope.newAnimal.amount > 0) {
                 let animal = $scope.getListAnimal($scope.newAnimal.number);
                 if (! $scope.hasTicket(animal.id)) {
@@ -223,6 +222,11 @@ angular.module('AnimalModule').controller('AnimalController', [
             $('#closeModalRepeat').click();
         };
 
+        window.setInterval(function() {
+            $scope.seconds--;
+            $scope.$apply();
+        }, 1000);
+
         $scope.data = data;
         $scope.data.animalsTicket = [];
         $scope.newAnimal = {};
@@ -231,5 +235,6 @@ angular.module('AnimalModule').controller('AnimalController', [
         $scope.repeatLoading = false;
         $scope.repeatTickets = [];
         $scope.filterTicket = '';
+        $scope.seconds = seconds;
     }])
 ;
