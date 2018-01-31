@@ -75,23 +75,26 @@ angular.module('AnimalModule').controller('AnimalController', [
         
         $scope.printIfHasList = function () {
 
-            if ($scope.newAnimal.number !== '' && ! parseInt($scope.newAnimal.number)) {
-                var animal = $scope.findByName(
-                    $scope.newAnimal.number ? $scope.newAnimal.number : ''
-                );
-
-                if (animal) {
-                    $scope.newAnimal.number = animal.number;
-                }
-            }
-
             if ($scope.hasList($scope.newAnimal.number)) {
                 return $scope.getListAnimal($scope.newAnimal.number).name;
             }
 
             return '-';
         };
-        
+
+        $scope.$watch('newAnimal.number', function(newValue, oldValue) {
+            if (newValue !== '' && ! parseInt(newValue)) {
+                var animal = $scope.findByName(
+                    newValue ? newValue : ''
+                );
+
+                if (animal) {
+                    $scope.newAnimal.number = animal.number;
+                    $scope.setFocus = true;
+                }
+            }
+        });
+
         $scope.findByName = function (name) {
             var searchName = $scope.clearName(name);
             var animalName;
@@ -264,6 +267,15 @@ angular.module('AnimalModule').controller('AnimalController', [
             }
         }, interval);
 
+        // Verifica el cambio de focus
+        window.setInterval(function() {
+            if ($scope.setFocus) {
+                $('#newAnimalAmount').focus();
+                $scope.setFocus = false;
+                $scope.$apply();
+            }
+        }, 100);
+
         $scope.data = data;
         $scope.data.animalsTicket = [];
         $scope.newAnimal = {};
@@ -272,6 +284,7 @@ angular.module('AnimalModule').controller('AnimalController', [
         $scope.repeatLoading = false;
         $scope.repeatTickets = [];
         $scope.filterTicket = '';
+        $scope.setFocus = false;
         $scope.seconds = seconds;
         $scope.minutes = 0;
         $scope.hours = 0;
