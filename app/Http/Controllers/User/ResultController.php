@@ -54,7 +54,7 @@ class ResultController extends Controller
         DB::beginTransaction();
 
         if ($result = $dailySort->getResultToDate($date)) {
-            // Si ya posee un ganador este ticket, paso los tickets a "activo" nuevamente
+            // Si ya posee un ganador este sorteo, paso los tickets a "activo" nuevamente
             $tickets = $dailySort->getTicketsToDate($date);
 
             foreach ($tickets as $ticket) {

@@ -95,6 +95,16 @@ class Ticket extends Model
     }
 
     /**
+     * Indica si un ticket esta anulado
+     *
+     * @return bool
+     */
+    public function isNull()
+    {
+        return $this->status === self::STATUS_NULL;
+    }
+
+    /**
      * Evalua si un ticket es ganador. Este codigo se debe usar cuando se
      * esta estableciendo el resultado, en cualquier otro caso probablemente
      * deba usar isGain() ya que no es necesario hacer esta consulta
@@ -102,6 +112,10 @@ class Ticket extends Model
      * @return bool
      */
     public function ticketIsGain() {
+        if ($this->isNull()) {
+            return false;
+        }
+
         foreach ($this->dailySorts as $dailySort) {
 
             $result = $dailySort->getResultToDate($this->created_at);
