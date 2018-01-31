@@ -200,10 +200,11 @@
                         <div class="text-center">
 
                             <button
+                                    id="btnSaveTicket"
                                     class="btn btn-lg btn-primary-color"
                                     ng-show="data.animalsTicket.length"
                                     ng-disabled="! hasSelectedSort() || hasLimitError()">
-                                <i class="fa fa-save"></i> Guardar ticket
+                                <i class="fa fa-save"></i> Guardar ticket (F2)
                             </button>
                         </div>
                     </form>
@@ -308,6 +309,12 @@
 
         $('#newAnimalNumber').focus();
 
+        $(window).on('keydown', function(event) {
+            if (event.keyCode === 113) {
+                // F2
+                $('#btnSaveTicket').click();
+            }
+        });
     </script>
 @endsection
 
