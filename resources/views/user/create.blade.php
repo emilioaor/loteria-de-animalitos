@@ -200,12 +200,19 @@
                         <div class="text-center">
 
                             <button
+                                    type="button"
                                     id="btnSaveTicket"
                                     class="btn btn-lg btn-primary-color"
-                                    ng-show="data.animalsTicket.length"
-                                    ng-disabled="! hasSelectedSort() || hasLimitError()">
+                                    ng-if="data.animalsTicket.length && ! submitted"
+                                    ng-disabled="! hasSelectedSort() || hasLimitError() || submitted"
+                                    ng-click="saveTicket()">
                                 <i class="fa fa-save"></i> Guardar ticket (F2)
                             </button>
+
+                            <img
+                                    ng-if="submitted"
+                                    src="{{ asset('img/loading.gif') }}"
+                                    alt="Cargando..">
                         </div>
                     </form>
                 </div>

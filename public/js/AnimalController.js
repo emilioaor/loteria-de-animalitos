@@ -239,6 +239,13 @@ angular.module('AnimalModule').controller('AnimalController', [
             $scope.getTotal();
         };
 
+        $scope.saveTicket = function () {
+            if (! $scope.submitted) {
+                $scope.submitted = true;
+                $('#formAnimal').submit();
+            }
+        };
+
         var interval = 1000;
         window.setInterval(function() {
             if ($scope.hours > 0 || $scope.minutes > 0 || $scope.seconds > 0) {
@@ -285,6 +292,7 @@ angular.module('AnimalModule').controller('AnimalController', [
         $scope.repeatTickets = [];
         $scope.filterTicket = '';
         $scope.setFocus = false;
+        $scope.submitted = false;
         $scope.seconds = seconds;
         $scope.minutes = 0;
         $scope.hours = 0;
