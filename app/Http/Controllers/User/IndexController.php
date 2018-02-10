@@ -249,7 +249,7 @@ class IndexController extends Controller
                     $animal->limit = floatval($animal->sort->daily_limit);
                 } else {
                     // Si no ha salido esta semana, le inicializo un limite mas bajo
-                    $animal->limit = 1000;
+                    $animal->limit = 2000;
                 }
             }
 
