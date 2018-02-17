@@ -46,6 +46,11 @@ class ReportController extends Controller
             ->where('created_at', '<=', $dateEnd)
             ->where('status', '<>', Ticket::STATUS_NULL)
             ->orderBy('created_at', 'DESC')
+            ->with([
+                'dailySorts',
+                'animals',
+                'user',
+            ])
         ;
 
         if (Auth::user()->level == User::LEVEL_USER) {
