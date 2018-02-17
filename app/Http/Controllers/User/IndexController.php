@@ -248,8 +248,10 @@ class IndexController extends Controller
                     // Si el animalito ya salio esta semana, le inicializo el limite del sorteo
                     $animal->limit = floatval($animal->sort->daily_limit);
                 } else {
-                    // Si no ha salido esta semana, le inicializo un limite mas bajo
-                    $animal->limit = 2000;
+                    // Si no ha salido esta semana, se asigna el limite configurado para estos casos
+                    $animal->limit = ($weekLimit = floatval($animal->sort->week_limit)) ?
+                        $weekLimit :
+                        0;
                 }
             }
 
