@@ -61,6 +61,15 @@ class ReportController extends Controller
             $totalGainAmount += $ticket->payToGain();
         }
 
+        // Por el momento cargo una vista normal mientras resuelvo problemas con rendimiento
+
+        return view('pdf.report', [
+            'tickets' => $tickets,
+            'start' => $dateStart,
+            'end' => $dateEnd,
+            'totalAmount' => $totalAmount,
+            'totalGainAmount' => $totalGainAmount,
+        ]);
 
         $pdf = PDF::loadView('pdf.dailyReport', [
             'tickets' => $tickets,
