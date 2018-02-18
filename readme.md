@@ -35,12 +35,6 @@ Pasos para la instalación
         php artisan db:seed
 Estos usuarios son **admin** y **taq1**, ambas contraseñas **123456**
 
-5. Opcionalmente el sistema contiene un comando para generar los sorteos diariamente a las 12:00 am. Dicho comando se puede automatizar agregando la siguiente tarea a un cron
-
-        * * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
-Cabe destacar que debe remplazar **path-to-your-project** por la carpeta donde se ubica el proyecto
-
-
 ¿Como imprimir desde una tickera?
 ---------------------------------------------------------------------------------------------
 
